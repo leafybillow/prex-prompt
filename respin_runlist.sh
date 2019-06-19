@@ -15,5 +15,4 @@ while IFS= read -r line; do
     root -b -q -l './scripts/PlotSummary.C('$runnum')';
     cp ./japanOutput/summary_$runnum.txt ./summary/run$runnum/;
     mv ./japanOutput/summary_$runnum.txt ./japanOutput/summary_$runnum\_respin2.txt;
-    
 done < $1

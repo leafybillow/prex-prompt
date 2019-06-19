@@ -1,18 +1,17 @@
 #! /bin/sh
-
 runnum=$1;
-if [ ! -d ./hallaweb_online/summary/run$runnum]; then
-    mkdir ./hallaweb_online/summary/run$runnum;
-fi
 
-./qwparity -r $runnum -c prex_respin2.conf ;
+#JAPAN First Pass
+timenow=$(date +"%Y-%m%d-%H%M");
+./qwparity -r $runnum -c prex.conf \
+    --QwLog.logfile ./QwLog/QwLog_run$runnum\_prompt_pass1_$timenow.txt ;
 
-./qwparity -r $runnum -c prex_respin2.conf \
-    --rootfile-stem prexRespin2_pass2_ ;
+#JAPAN Second Pass
+timenow=$(date +"%Y-%m%d-%H%M");
+./qwparity -r $runnum -c prex.conf \
+    --rootfile-stem prexPrompt_pass2_ \
+    --QwLog.logfile ./QwLog/QwLog_run$runnum\_prompt_pass2_$timenow.txt ;
 
-root -b -q -l './rootMacros/PlotSummary.C('$runnum')';
-cp ./japanOutput/summary_$runnum.txt ./japanOutput/summary_$runnum\_respin2.txt;
-
-chgrp -R a-parity ./hallaweb_online/summary/run$runnum;
-chmod -R 755 ./hallaweb_online/summary/run$runnum;
+# Beam Modulation Data Extraction
+./summary.sh $runnum;
     
