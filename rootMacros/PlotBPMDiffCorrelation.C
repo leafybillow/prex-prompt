@@ -12,11 +12,12 @@ void PlotBPMDiffCorrelation(){
   TString draw_opts[] = {"COLZ","fit","scat"};
   
   Int_t nbpmXY = vBPMXY.size();
-  TCanvas* c_square = new TCanvas("","",nbpmXY*600,nbpmXY*600);
+  TCanvas* c_this = new TCanvas("","",2400,2400);
 
-  c_square->Divide(nbpmXY,nbpmXY);
+  c_this->Divide(nbpmXY,nbpmXY);
   for(int iopt=0;iopt<3;iopt++){
-    c_square->cd();
+    Int_t can_width = 2400/nbpmXY;
+    c_this->cd();
     PlotCorrelation(vBPMXY,vBPMXY,
 		    "mul",
 		    "diff_","diff_",
@@ -29,11 +30,9 @@ void PlotBPMDiffCorrelation(){
     label->SetTextFont(23);
     label->SetTextSize(70);
     label->SetNDC();
-    c_square->cd();
+    c_this->cd();
     label->Draw("same");
-    c_square->SaveAs(output_path+plot_title);
-    c_square->Clear("D");
+    c_this->SaveAs(output_path+plot_title);
+    c_this->Clear("D");
   }
-
-
 }
