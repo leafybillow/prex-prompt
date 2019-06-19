@@ -28,11 +28,12 @@
 
 void PlotSummary(Int_t run_num){
   run_number = run_num;
-  path = TString(getenv("QW_ROOTFILES"))+"/";
-  prefix = "prexRespin2_pass2";
+  path = "./japanOutput/";
+  // path = TString(getenv("QW_ROOTFILES"))+"/";
+  prefix = "prexPrompt_pass2";
   file_name = Form("%s_%d.root",prefix.Data(),run_number);
   TFile* rootfile = TFile::Open(path+file_name);
-  output_path = Form("./summary/run%d/",run_number);
+  output_path = Form("./SummaryPlots/run%d/",run_number);
   //  output_path = "./";
   TString pdf_filename;
   //===== Error Counter from Evt Tree =====   
