@@ -3,13 +3,13 @@
 runnum=$1;
 
 # Making Summary Plots
-if [ ! -d ./SummaryPlots/run$runnum]; then
+if [ ! -d ./SummaryPlots/run$runnum ]; then
     mkdir ./SummaryPlots/run$runnum;
 fi
 root -b -q -l './rootMacros/PlotSummary.C('$runnum')';
 
 #Rsync to OnlineWeb folder
-if [ ! -d ./hallaweb_online/summary/run$runnum]; then
+if [ ! -d ./hallaweb_online/summary/run$runnum ]; then
     mkdir ./hallaweb_online/summary/run$runnum;
 fi
 rsync -a ./SummaryPlots/run$runnum/

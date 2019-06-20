@@ -3,7 +3,11 @@ runnum=$1;
 
 #JAPAN First Pass
 timenow=$(date +"%Y-%m%d-%H%M");
+
 ./qwparity -r $runnum -c prex_prompt.conf \
+    --enable-lrbcorrection \
+    --enable-correlator \
+    --enable-correction \
     --rootfile-stem prexPrompt_pass1_ \
     --QwLog.logfile ./LogFiles/QwLog_run$runnum\_prompt_pass1_$timenow.txt ;
 
@@ -12,7 +16,11 @@ cp ./japanOutput/summary_$runnum.txt \
 
 #JAPAN Second Pass
 timenow=$(date +"%Y-%m%d-%H%M");
+
 ./qwparity -r $runnum -c prex_prompt.conf \
+    --enable-lrbcorrection \
+    --enable-correlator \
+    --enable-correction \
     --rootfile-stem prexPrompt_pass2_ \
     --QwLog.logfile ./LogFiles/QwLog_run$runnum\_prompt_pass2_$timenow.txt ;
 
@@ -23,5 +31,5 @@ cp ./japanOutput/summary_$runnum.txt \
 # BeamMod Data Extraction (FIXME)
 
 # Make Summary Plots/Text and Rsyncs to HallA onlineWeb
-./summary.sh $runnum;
+#./summary.sh $runnum;
     
