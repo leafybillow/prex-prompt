@@ -39,8 +39,8 @@ void Integrated(){
 	     "asym_bcm_an_ds",
 	     "ErrorFlag==0",
 	     20);
-  plot_title = Form("run%d_integrated_convergence_analog_bcm.png",
-		    run_number);
+  plot_title = Form("run%s_integrated_convergence_analog_bcm.png",
+		    run_seg.Data());
   TText *label = new TText(0.0,0.01,plot_title);      
   label->SetNDC();
   this_can->cd();
@@ -56,8 +56,8 @@ void Integrated(){
 	       "ErrorFlag==0",
 	       20);
     if(ibpm%2==1){
-      plot_title = Form("run%d_integrated_convergence_%s_%s.png",
-			run_number,vDitherBPM[ibpm-1],vDitherBPM[ibpm]);
+      plot_title = Form("run%s_integrated_convergence_%s_%s.png",
+			run_seg.Data(),vDitherBPM[ibpm-1],vDitherBPM[ibpm]);
       TText *label = new TText(0.0,0.01,plot_title);      
       label->SetNDC();
       this_can->cd();
@@ -77,8 +77,8 @@ void Integrated(){
 	       20);
 
     if(isam%2==1){
-      plot_title = Form("run%d_integrated_convergence_%s_%s.png",
-			run_number,sam_array[isam-1],sam_array[isam]);
+      plot_title = Form("run%s_integrated_convergence_%s_%s.png",
+			run_seg.Data(),sam_array[isam-1],sam_array[isam]);
       TText *label = new TText(0.0,0.01,plot_title);      
       label->SetNDC();
       this_can->cd();
@@ -87,8 +87,8 @@ void Integrated(){
       this_can->Clear("D");
     }
   }
-  gSystem->Exec(Form("convert $(ls -rt %s*integrated_convergence*.png) %srun%d_convergence.pdf",
-		     output_path.Data(),output_path.Data(),run_number));
+  gSystem->Exec(Form("convert $(ls -rt %s*integrated_convergence*.png) %srun%s_convergence.pdf",
+		     output_path.Data(),output_path.Data(),run_seg.Data()));
 
   gSystem->Exec(Form("rm %s*integrated_convergence*.png",output_path.Data()));
   

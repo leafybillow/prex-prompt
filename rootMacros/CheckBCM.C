@@ -66,8 +66,8 @@ void CheckBCM(){
     if(h_buff!=0)
       h_buff->SetLineColor(kRed);
     
-    plot_title = Form("run%d_%s.png",
-		      run_number,
+    plot_title = Form("run%s_%s.png",
+		      run_seg.Data(),
 		      device_name);
 
     TText *t1 = new TText(0.0,0.007,plot_title);

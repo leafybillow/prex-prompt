@@ -79,8 +79,8 @@ void CheckBPM(){
     
     } // end of XY loop
     
-    plot_title  = Form("run%d_%s.png",
-		       run_number,
+    plot_title  = Form("run%s_%s.png",
+		       run_seg.Data(),
 		       vBPM[ibpm]);
 
     TText *label = new TText(0.0,0.005,plot_title);     
@@ -126,8 +126,8 @@ void CheckBPM(){
     st->SetY1NDC(0.9);
     st->SetY2NDC(0.7);
     
-    plot_title  = Form("run%d_%s_XY_Awiresum.png",
-		       run_number,vBPM[ibpm]);
+    plot_title  = Form("run%s_%s_XY_Awiresum.png",
+		       run_seg.Data(),vBPM[ibpm]);
     label = new TText(0.0,0.005,plot_title);     
     label->SetTextFont(23);
     label->SetTextSize(50);

@@ -14,7 +14,7 @@ void PlotInjBPMSAelli(){
   TCanvas *c1 = new TCanvas("c1","c1",3600,2400);
   c1->cd();
   PlotInjBPMSAelli(vInjBPM,1,"ErrorFlag==0");  
-  plot_title = Form("run%d_injector_BPM_Aelli.png",run_number);
+  plot_title = Form("run%s_injector_BPM_Aelli.png",run_seg.Data());
   c1->SaveAs(output_path+plot_title);
 }
 

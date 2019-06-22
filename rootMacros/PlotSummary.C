@@ -26,14 +26,15 @@
 #include "PlotErrorCounters.C"
 #include "Integrated.C"
 
-void PlotSummary(Int_t run_num){
-  run_number = run_num;
-  path = "./japanOutput/";
-  // path = TString(getenv("QW_ROOTFILES"))+"/";
-  prefix = "prexPrompt_pass2";
-  file_name = Form("%s_%d.root",prefix.Data(),run_number);
-  TFile* rootfile = TFile::Open(path+file_name);
-  output_path = Form("./SummaryPlots/run%d/",run_number);
+void PlotSummary(TString filename){
+
+  TFile* rootfile = TFile::Open(filename);
+  Ssiz_t pfirst = filename.Last('_')+1;
+  Ssiz_t plast = filename.Last('.')-1;
+  Ssiz_t plength = plast-pfirst+1;
+  run_seg = filename(pfirst,plength);
+  run_seg = run_seg.ReplaceAll('.','_');
+  output_path = Form("./SummaryPlots/run%s/",run_seg.Data());
   //  output_path = "./";
   TString pdf_filename;
   //===== Error Counter from Evt Tree =====   
@@ -42,10 +43,10 @@ void PlotSummary(Int_t run_num){
   CheckBCM();
   CheckBCMdd();
 
-  gSystem->Exec(Form("convert $(ls -rt %s*bcm*.png) %srun%d_summary_bcm.pdf",
+  gSystem->Exec(Form("convert $(ls -rt %s*bcm*.png) %srun%s_summary_bcm.pdf",
   		     output_path.Data(),
 		     output_path.Data(),
-  		     run_number));
+  		     run_seg.Data()));
 
   gSystem->Exec(Form("rm %s*bcm*.png",output_path.Data()));
 
@@ -53,20 +54,20 @@ void PlotSummary(Int_t run_num){
   CheckBPM();
   PlotBPMDiffCorrelation();
 
-  gSystem->Exec(Form("convert $(ls -rt %s*bpm*.png ) %srun%d_summary_bpm.pdf",
+  gSystem->Exec(Form("convert $(ls -rt %s*bpm*.png ) %srun%s_summary_bpm.pdf",
   		     output_path.Data(),
 		     output_path.Data(),
-  		     run_number));
+  		     run_seg.Data()));
 
   gSystem->Exec(Form("rm %s*bpm*.png",output_path.Data()));
 
   //===== SAM Plots =======
   CheckSAM();
   CheckSAMCorrelation();
-  gSystem->Exec(Form("convert $(ls -rt %s*sam*.png) %srun%d_summary_sam.pdf",
+  gSystem->Exec(Form("convert $(ls -rt %s*sam*.png) %srun%s_summary_sam.pdf",
   		     output_path.Data(),
 		     output_path.Data(),
-  		     run_number));
+  		     run_seg.Data()));
 
   gSystem->Exec(Form("rm %s*sam*.png",output_path.Data()));
 
@@ -81,21 +82,20 @@ void PlotSummary(Int_t run_num){
   PlotInjBPMSAq();
   PlotInjBPMSDr();
   PlotInjBPMSAelli();
-  pdf_filename = Form("run%d_injector_BPM.pdf",run_number);
-  gSystem->Exec(Form("convert $(ls -rt %srun%d*injector_BPM*.png) %s%s",
+  pdf_filename = Form("run%s_injector_BPM.pdf",run_seg.Data());
+  gSystem->Exec(Form("convert $(ls -rt %srun%s*injector_BPM*.png) %s%s",
 		     output_path.Data(),
-		     run_number,
+		     run_seg.Data(),
 		     output_path.Data(),
 		     pdf_filename.Data()));
 
-  gSystem->Exec(Form("rm %srun%d*injector_BPM*.png",
+  gSystem->Exec(Form("rm %srun%s*injector_BPM*.png",
 		     output_path.Data(),
-		     run_number)); 
+		     run_seg.Data())); 
 
-
-  gSystem->Exec(Form("pdfunite $(ls -rt %s/*_summary_*.pdf) %s/run%d_all.pdf",
+  gSystem->Exec(Form("pdfunite $(ls -rt %s/*_summary_*.pdf) %s/run%s_all.pdf",
 		     output_path.Data(),
-  		     output_path.Data(),run_number));
+  		     output_path.Data(),run_seg.Data()));
 
 }
 

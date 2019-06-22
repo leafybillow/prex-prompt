@@ -29,8 +29,8 @@ void CheckSAMCorrelation(){
     c_this->SetCanvasSize(2400,ny*canvas_width);
     c_this->cd();
     PlotCorrelation(switch_key,treeName,draw_opts[iopt]);
-    plot_title  = Form("run%d_%s_vs_%s-%s.png",
-		       run_number,vtag_dv,vtag_iv,
+    plot_title  = Form("run%s_%s_vs_%s-%s.png",
+		       run_seg.Data(),vtag_dv,vtag_iv,
 		       draw_opts[iopt].Data());
     TText *label = new TText(0.0,0.005,plot_title);     
     label->SetTextFont(23);

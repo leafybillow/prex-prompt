@@ -16,8 +16,8 @@ void CheckBCMdd(){
   TCanvas *c3 = new TCanvas("c3","c3",2400,600);
   c3->cd();
   
-  vector<const char*> vBCM1={"bcm_an_us","bcm_an_us","bcm_dg_us"};
-  vector<const char*> vBCM2={"bcm_an_ds","bcm_an_ds3","bcm_dg_ds"};
+  vector<const char*> vBCM1={"bcm_an_us","bcm_an_us","bcm_an_ds"};
+  vector<const char*> vBCM2={"bcm_an_ds","bcm_an_ds3","bcm_an_ds3"};
   Int_t nplot = 3;
   for(int ibcm=0; ibcm<nplot;ibcm++){
 
@@ -25,8 +25,8 @@ void CheckBCMdd(){
     c3->cd();
     CheckBCMdd(vBCM1[ibcm],vBCM2[ibcm],treeName);
 
-    plot_title = Form("run%d_asym_%s_vs_asym_%s.png",
-		      run_number,vBCM1[ibcm],vBCM2[ibcm]);
+    plot_title = Form("run%s_asym_%s_vs_asym_%s.png",
+		      run_seg.Data(),vBCM1[ibcm],vBCM2[ibcm]);
     TText *label = new TText(0.0,0.01,plot_title);      
     label->SetNDC();
     c3->cd();

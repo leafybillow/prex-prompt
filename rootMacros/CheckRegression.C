@@ -48,8 +48,8 @@ void CheckRegression(){
   		      draw_opts[iopt],
   		      "ErrorFlag==0");
 
-      plot_title  = Form("run%d_regression_%s_vs_%s-%s.png",
-  			 run_number,vtag_dv[iplot],vtag_iv[iplot],
+      plot_title  = Form("run%s_regression_%s_vs_%s-%s.png",
+  			 run_seg.Data(),vtag_dv[iplot],vtag_iv[iplot],
   			 draw_opts[iopt].Data());
       TText *label = new TText(0.0,0.005,plot_title);     
       label->SetTextFont(23);
@@ -61,10 +61,10 @@ void CheckRegression(){
       c_this->Clear("D");
     } // end of draw_opts loop
   } // end of plots loop
-  gSystem->Exec(Form("convert $(ls -rt %s/*regression*.png) %s/run%d_summary_regression.pdf",
+  gSystem->Exec(Form("convert $(ls -rt %s/*regression*.png) %s/run%s_summary_regression.pdf",
 		     output_path.Data(),
 		     output_path.Data(),
-		     run_number));
+		     run_seg.Data()));
   gSystem->Exec(Form("rm %s/*regression*_vs_*.png",output_path.Data()));
 
 }

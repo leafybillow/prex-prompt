@@ -22,15 +22,15 @@ void CheckSAM(){
   TH2D *h2d_buff;
   TVirtualPad* pad_buff;
   TGraph* g_buff;
-  evt_tree->SetAlias("curmon","bcm_an_ds3");
+
   for(int isam=0;isam<nsam;isam++){
     const char* device_name = vSAM[isam];
     
     pad_buff = c1->cd(1);
-    evt_tree->Draw(Form("curmon*%s:Entry$",device_name),"","l");
+    evt_tree->Draw(Form("%s:Entry$",device_name),"","l");
     g_buff = (TGraph*)pad_buff->FindObject("Graph");
     g_buff->SetName("GraphAll");
-    evt_tree->Draw(Form("curmon*%s:Entry$",device_name),"ErrorFlag!=0","* same");
+    evt_tree->Draw(Form("%s:Entry$",device_name),"ErrorFlag!=0","* same");
     g_buff = (TGraph*)pad_buff->FindObject("Graph");
     g_buff->SetMarkerColor(kRed);
 
@@ -68,8 +68,8 @@ void CheckSAM(){
     if(h_buff!=0)
       h_buff->SetLineColor(kRed);
     
-    plot_title = Form("run%d_%s.png",
-		      run_number,
+    plot_title = Form("run%s_%s.png",
+		      run_seg.Data(),
 		      device_name);
 
     TText *t1 = new TText(0.0,0.007,plot_title);

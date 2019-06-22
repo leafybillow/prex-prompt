@@ -16,7 +16,7 @@ void PlotInjBPMSAq(){
   TCanvas *c4 = new TCanvas("c4","c4",3600,2400);
   c4->cd();
   PlotInjBPMSAq(1,"ErrorFlag==0");
-  plot_title = Form("run%d_injector_BPM_Aq.png",run_number);
+  plot_title = Form("run%s_injector_BPM_Aq.png",run_seg.Data());
   c4->SaveAs(output_path+plot_title);
 }
 

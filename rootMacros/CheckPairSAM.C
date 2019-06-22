@@ -63,7 +63,7 @@ void CheckPairSAM(){
   up = hfit->GetMean()+2*hfit->GetRMS();
   hfit->Fit("pol1","QR","",low,up);
   
-  filename = Form("run%d_paired_sam_AqDS.png",run_number);
+  filename = Form("run%s_paired_sam_AqDS.png",run_seg.Data());
   label = new TText(0.0,0.01,filename);     
   label->SetTextSize(0.03);
   label->SetNDC();
@@ -109,7 +109,7 @@ void CheckPairSAM(){
   up = hfit->GetMean()+2*hfit->GetRMS();
   hfit->Fit("pol1","QR","",low,up);
   
-  filename = Form("run%d_paired_sam_AqUS.png",run_number);
+  filename = Form("run%s_paired_sam_AqUS.png",run_seg.Data());
   label = new TText(0.0,0.01,filename);     
   label->SetTextSize(0.03);
   label->SetNDC();
@@ -140,7 +140,7 @@ void CheckPairSAM(){
   c1->cd(6);
   mulc_tree->Draw("(cor_sam4+cor_sam8)/ppm",user_cut);
 
-  filename = Form("run%d_paired_sam_48.png",run_number);
+  filename = Form("run%s_paired_sam_48.png",run_seg.Data());
   label = new TText(0.0,0.01,filename);     
   label->SetTextSize(0.03);
   label->SetNDC();
@@ -164,7 +164,7 @@ void CheckPairSAM(){
   c2->cd(6);
   mulc_tree->Draw("(cor_sam2+cor_sam6)/ppm",user_cut);
 
-  filename = Form("run%d_paired_sam_26.png",run_number);
+  filename = Form("run%s_paired_sam_26.png",run_seg.Data());
   label = new TText(0.0,0.01,filename);     
   label->SetTextSize(0.03);
   label->SetNDC();
@@ -183,7 +183,7 @@ void CheckPairSAM(){
   c4->cd(4);
   mulc_tree->Draw("(cor_sam2+cor_sam6)/2/ppm - (cor_sam4+cor_sam8)/2/ppm ",user_cut);
 
-  filename = Form("run%d_paired_sam_dd.png",run_number);
+  filename = Form("run%s_paired_sam_dd.png",run_seg.Data());
   label = new TText(0.0,0.01,filename);     
   label->SetTextSize(0.05);
   label->SetNDC();
@@ -191,9 +191,9 @@ void CheckPairSAM(){
   label->Draw("same");
   c4->SaveAs(output_path+filename);
 
-  gSystem->Exec(Form("convert $(ls -rt %s/*paired_sam*.png) %s/run%d_summary_paired_sam.pdf",
+  gSystem->Exec(Form("convert $(ls -rt %s/*paired_sam*.png) %s/run%s_summary_paired_sam.pdf",
 		     output_path.Data(),
-		     output_path.Data(),run_number));
+		     output_path.Data(),run_seg.Data()));
   gSystem->Exec(Form("rm %s/*paired_sam*.png ",output_path.Data()));
 }
 

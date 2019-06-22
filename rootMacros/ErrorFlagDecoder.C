@@ -55,9 +55,9 @@ void ErrorFlagDecoder(){
 				     "FFB OFF for Energy Mod",
 				     "BMod Channel Failure",
 				     "Mode 3",
-				     "Stability Cut",
+				     "Stability Error",
 				     "Beam Trip",
-				     "Stability Cut (Not in Use ?)"};
+				     "Stability Cut"};
 
   UInt_t ErrorCode[nErrorTypes] = {0,
 				   kErrorFlag_EventCut_L,
