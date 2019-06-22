@@ -1,6 +1,11 @@
 #! /bin/sh
 runnum=$1;
 
+#  Remove the LRB output files if they exist
+if [ -f ./LRBoutput/blueR$runnum.000new.slope.root ]; then
+    rm -f ./LRBoutput/blueR$runnum.000new.slope.root
+fi
+
 #JAPAN First Pass
 timenow=$(date +"%Y-%m%d-%H%M");
 
@@ -18,9 +23,6 @@ timenow=$(date +"%Y-%m%d-%H%M");
     --rootfile-stem prexPrompt_pass2_ \
     --QwLog.logfile ./LogFiles/QwLog_run$runnum\_prompt_pass2_$timenow.txt ;
 
-# *Assumming prompt summary gets updated at 2nd pass.
-cp ./japanOutput/summary_*$runnum*.txt \
-    ./SummaryText/
 
 # BeamMod Data Extraction (FIXME)
 # BeamMod Instant Slope Calculation (FIXME)
