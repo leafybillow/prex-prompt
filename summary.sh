@@ -13,8 +13,9 @@ do
 
     trim=${rootfile%.root}
     run_dot_seg=${trim#*pass2_}
-
+    run_num=${run_dot_seg%.*}
     run_seg=${run_dot_seg/./_}
+
     if [ ! -d ./SummaryPlots/run$run_seg ]; then
 	mkdir ./SummaryPlots/run$run_seg;
     fi
@@ -28,7 +29,11 @@ do
     cp  ./SummaryPlots/run$run_seg/* \
 	./hallaweb_online/summary/run$run_seg/;
 
-    mv  ./SummaryText/summary_$run_dot_seg.txt \
+
+    cp ./japanOutput/summary_*$runnum*.txt \
+	./SummaryText/
+
+    mv  ./SummaryText/summary_$run_num.txt \
 	./SummaryText/summary_$level_$run_seg.txt \
 
     cp  ./SummaryText/summary_$level_$run_seg.txt \
