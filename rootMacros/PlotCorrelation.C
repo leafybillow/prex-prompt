@@ -186,21 +186,23 @@ void PlotCorrelation(vector<const char* > &DVar_src, vector<const char*> &IVar_s
 		    iv_mean[icol]+2*iv_rms[icol]);
 	pad_buff->Update();
 	TF1 *f1 = h_buff->GetFunction("pol1");
-	Double_t slope = f1->GetParameter(1);
-	TPaveStats* st = (TPaveStats*)h_buff->FindObject("stats");
-	st->SetOptFit(1);
-	st->SetOptStat(0);
-	if(slope<0){
-	  st->SetX2NDC(1.0);
-	  st->SetY2NDC(0.9);
-	  st->SetX1NDC(0.5);
-	  st->SetY1NDC(0.6);
-	}
-	else{
-	  st->SetX2NDC(0.5);
-	  st->SetY2NDC(0.6);
-	  st->SetX1NDC(0.0);
-	  st->SetY1NDC(0.9);
+	if (f1!=NULL){
+	  Double_t slope = f1->GetParameter(1);
+	  TPaveStats* st = (TPaveStats*)h_buff->FindObject("stats");
+	  st->SetOptFit(1);
+	  st->SetOptStat(0);
+	  if(slope<0){
+	    st->SetX2NDC(1.0);
+	    st->SetY2NDC(0.9);
+	    st->SetX1NDC(0.5);
+	    st->SetY1NDC(0.6);
+	  }
+	  else{
+	    st->SetX2NDC(0.5);
+	    st->SetY2NDC(0.6);
+	    st->SetX1NDC(0.0);
+	    st->SetY1NDC(0.9);
+	  }
 	}
       }
       else{
@@ -208,7 +210,8 @@ void PlotCorrelation(vector<const char* > &DVar_src, vector<const char*> &IVar_s
 			DVar[irow].Data(),IVar[icol].Data()),
 		   cuts,draw_opt);
 	h_buff = (TH1D*)pad_buff->FindObject("htemp");
-	h_buff->SetTitle("");
+	if (h_buff!=NULL)
+	  h_buff->SetTitle("");
       }
 
       iv_txt[icol]->Draw("same");

@@ -146,34 +146,37 @@ void CheckRegression(vector<const char* > &DVar, vector<const char*> &IVar,
 			DVar[irow],IVar[icol]),
 		   cuts+device_error_cut);
 	h_buff = (TH1D*)pad_buff->FindObject("htemp");
-	h_buff->SetTitle("");
+	if (h_buff!=NULL)
+	  h_buff->SetTitle("");
       }
       else if(draw_opt=="fit"){
 	mul_tree->Draw(Form("%s:%s",
 			     DVar[irow],IVar[icol]),
 			cuts+device_error_cut,"prof");
 	h_buff = (TH1D*)pad_buff->FindObject("htemp");
-	h_buff->SetTitle("");
-	h_buff->Fit("pol1","QR","",
-		    iv_mean[icol]-2*iv_rms[icol],
-		    iv_mean[icol]+2*iv_rms[icol]);
-	pad_buff->Update();
-	TF1 *f1 = h_buff->GetFunction("pol1");
-	Double_t slope = f1->GetParameter(1);
-	TPaveStats* st = (TPaveStats*)h_buff->FindObject("stats");
-	st->SetOptFit(1);
-	st->SetOptStat(0);
-	if(slope<0){
-	  st->SetX2NDC(1.0);
-	  st->SetY2NDC(0.9);
-	  st->SetX1NDC(0.5);
-	  st->SetY1NDC(0.6);
-	}
-	else{
-	  st->SetX2NDC(0.5);
-	  st->SetY2NDC(0.6);
-	  st->SetX1NDC(0.0);
-	  st->SetY1NDC(0.9);
+	if (h_buff!=NULL){
+	  h_buff->SetTitle("");
+	  h_buff->Fit("pol1","QR","",
+		      iv_mean[icol]-2*iv_rms[icol],
+		      iv_mean[icol]+2*iv_rms[icol]);
+	  pad_buff->Update();
+	  TF1 *f1 = h_buff->GetFunction("pol1");
+	  Double_t slope = f1->GetParameter(1);
+	  TPaveStats* st = (TPaveStats*)h_buff->FindObject("stats");
+	  st->SetOptFit(1);
+	  st->SetOptStat(0);
+	  if(slope<0){
+	    st->SetX2NDC(1.0);
+	    st->SetY2NDC(0.9);
+	    st->SetX1NDC(0.5);
+	    st->SetY1NDC(0.6);
+	  }
+	  else{
+	    st->SetX2NDC(0.5);
+	    st->SetY2NDC(0.6);
+	    st->SetX1NDC(0.0);
+	    st->SetY1NDC(0.9);
+	  }
 	}
       }
       else{
@@ -181,7 +184,8 @@ void CheckRegression(vector<const char* > &DVar, vector<const char*> &IVar,
 			DVar[irow],IVar[icol]),
 		   cuts,draw_opt);
 	h_buff = (TH1D*)pad_buff->FindObject("htemp");
-	h_buff->SetTitle("");
+	if (h_buff!=NULL)
+	  h_buff->SetTitle("");
       }
 
       iv_txt[icol]->Draw("same");

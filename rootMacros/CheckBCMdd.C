@@ -59,14 +59,16 @@ void CheckBCMdd(const char* bcm1 , const char* bcm2, TString treeName){
   tree->Draw(Form("%s:%s",asym_bcm1.Data(),asym_bcm2.Data()),"ErrorFlag==0","prof");
   gPad->Update();
   prof_buff=(TProfile*)pad_buff->FindObject("htemp");
-  TPaveStats* st = (TPaveStats*)prof_buff->FindObject("stats");
-  st->SetOptFit(1);
-  st->SetOptStat(0);
-  st->SetX1NDC(0.1);
-  st->SetY1NDC(0.9);
-  st->SetY2NDC(0.7);
-  st->SetX2NDC(0.6);
-  prof_buff->Fit("pol1","Q");
+  if (prof_buff!=NULL){
+    TPaveStats* st = (TPaveStats*)prof_buff->FindObject("stats");
+    st->SetOptFit(1);
+    st->SetOptStat(0);
+    st->SetX1NDC(0.1);
+    st->SetY1NDC(0.9);
+    st->SetY2NDC(0.7);
+    st->SetX2NDC(0.6);
+    prof_buff->Fit("pol1","Q");
+  }
   
   pad1->cd(2);
   tree->Draw(Form("%s:%s",asym_bcm1.Data(),asym_bcm2.Data()),"ErrorFlag==0");
@@ -74,20 +76,23 @@ void CheckBCMdd(const char* bcm1 , const char* bcm2, TString treeName){
   pad_buff = pad1->cd(3);
   tree->Draw(Form("%s-%s",asym_bcm1.Data(),asym_bcm2.Data()),"ErrorFlag==0");
   h_buff=(TH1D*)pad_buff->FindObject("htemp");
-  h_buff->SetName(treeName+"Tree");
-  pad_buff->Update();
-  TPaveStats* st_hist = (TPaveStats*)h_buff->FindObject("stats");
-  st_hist->SetX1NDC(0.7);
-  st_hist->SetY1NDC(0.6);
-  st_hist->SetY2NDC(0.9);
-  st_hist->SetX2NDC(1.0);
+  if (h_buff!=NULL){
+    h_buff->SetName(treeName+"Tree");
+    pad_buff->Update();
+    TPaveStats* st_hist = (TPaveStats*)h_buff->FindObject("stats");
+    st_hist->SetX1NDC(0.7);
+    st_hist->SetY1NDC(0.6);
+    st_hist->SetY2NDC(0.9);
+    st_hist->SetX2NDC(1.0);
+  }
 
   pad_buff = pad1->cd(4);
   tree->Draw(Form("%s-%s:pattern_number",asym_bcm1.Data(),asym_bcm2.Data()),
 	     "ErrorFlag==0",
 	     "COL");
   TH2F* H_history = (TH2F*)pad_buff->FindObject("htemp");
-  H_history->Draw("candlex3");
+  if (H_history!=NULL)
+    H_history->Draw("candlex3");
 
 
 }

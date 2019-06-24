@@ -35,7 +35,8 @@ void CheckBCM(){
     pad_buff=c1->cd(2);
     evt_tree->Draw(Form("%s",device_name),"ErrorFlag==0","");
     h_buff=(TH1D*)pad_buff->FindObject("htemp");
-    h_buff->SetName("evtTree");
+    if(h_buff!=NULL)
+      h_buff->SetName("evtTree");
     
     evt_tree->Draw(Form("%s",device_name),
 	      Form("ErrorFlag==0 && %s.Device_Error_Code!=0",device_name),
@@ -48,7 +49,8 @@ void CheckBCM(){
 			device_name),
 		   "ErrorFlag==0","COL");
     TH2F* h2d_buff = (TH2F*)pad_buff->FindObject("htemp");
-    h2d_buff->Draw("candlex3");
+    if (h2d_buff!=NULL)
+      h2d_buff->Draw("candlex3");
 
     pad_buff=c1->cd(4);
     TH1D *hAq = new TH1D("hAq","",100,-1500,1500);

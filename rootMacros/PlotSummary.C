@@ -37,8 +37,35 @@ void PlotSummary(TString filename){
   output_path = Form("./SummaryPlots/run%s/",run_seg.Data());
   //  output_path = "./";
   TString pdf_filename;
+
+  //  Make sure we have the trees before proceeding.
+  TTree *evt_tree = (TTree*)gROOT->FindObject("evt");
+  if (evt_tree==NULL){
+    std::cout << "WARNING:  The event tree was not found for file "
+	      << filename << "!" << std::endl;
+    return;
+  }
+  TTree *mul_tree = (TTree*)gROOT->FindObject("mul");
+  if (mul_tree==NULL){
+    std::cout << "WARNING:  The multiplet tree was not found for file "
+	      << filename << "!" << std::endl;
+    return;
+  }
+
   //===== Error Counter from Evt Tree =====   
   PlotErrorCounters();
+
+  if (evt_tree->GetEntries("ErrorFlag==0")==0){
+    std::cout << "WARNING:  The event tree has no good events in file "
+	      << filename << "!" << std::endl;
+    return;
+  }
+  if (mul_tree->GetEntries("ErrorFlag==0")==0){
+    std::cout << "WARNING:  The multiplet tree has no good events in file "
+	      << filename << "!" << std::endl;
+    return;
+  }
+  
   //===== BCM  Plots =====
   CheckBCM();
   CheckBCMdd();
