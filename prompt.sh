@@ -4,7 +4,7 @@ runnum=$1;
 #  Remove the LRB output files if they exist
 shopt -s extglob
 # find split file
-slopefile_list=$(ls -1 ./LRBoutput/blueR$runnum.*.slope.root);
+slopefile_list=$(ls -1 ./LRBoutput/blueR$runnum*slope.root);
 shopt -u extglob
 
 for slopefile in $slopefile_list
