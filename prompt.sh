@@ -2,9 +2,16 @@
 runnum=$1;
 
 #  Remove the LRB output files if they exist
-if [ -f ./LRBoutput/blueR$runnum.000new.slope.root ]; then
-    rm -f ./LRBoutput/blueR$runnum.000new.slope.root
-fi
+shopt -s extglob
+# find split file
+slopefile_list=$(ls -1 ./LRBoutput/blueR$runnum.*.slope.root);
+shopt -u extglob
+
+for slopefile in $slopefile_list
+do
+    echo "deleting "  $slopefile;
+    rm -f $slopefile;
+done
 
 #JAPAN First Pass
 timenow=$(date +"%Y-%m%d-%H%M");
