@@ -30,7 +30,10 @@ void CheckBCM(){
     g_buff->SetName("GraphAll");
     evt_tree->Draw(Form("%s:Entry$",device_name),"ErrorFlag!=0","* same");
     g_buff = (TGraph*)pad_buff->FindObject("Graph");
-    g_buff->SetMarkerColor(kRed);
+    if(g_buff!=0)
+      g_buff->SetMarkerColor(kRed);
+
+    //===================================================
 
     pad_buff=c1->cd(2);
     evt_tree->Draw(Form("%s",device_name),"ErrorFlag==0","");
@@ -39,11 +42,14 @@ void CheckBCM(){
       h_buff->SetName("evtTree");
     
     evt_tree->Draw(Form("%s",device_name),
-	      Form("ErrorFlag==0 && %s.Device_Error_Code!=0",device_name),
-	      "same");
+		   Form("ErrorFlag==0 && %s.Device_Error_Code!=0",device_name),
+		   "same");
     h_buff=(TH1D*)pad_buff->FindObject("htemp");
     if(h_buff!=0)
       h_buff->SetLineColor(kRed);
+
+    //===================================================
+
     pad_buff=c1->cd(3);
     mul_tree->Draw(Form("asym_%s/ppm:pattern_number",
 			device_name),
@@ -51,6 +57,8 @@ void CheckBCM(){
     TH2F* h2d_buff = (TH2F*)pad_buff->FindObject("htemp");
     if (h2d_buff!=NULL)
       h2d_buff->Draw("candlex3");
+
+    //===================================================
 
     pad_buff=c1->cd(4);
     TH1D *hAq = new TH1D("hAq","",100,-1500,1500);
@@ -61,12 +69,14 @@ void CheckBCM(){
     TPaveStats *st = (TPaveStats*)hAq->FindObject("stats");
     st->SetOptStat(111110);
 
-    mul_tree->Draw(Form("asym_%s/ppm",device_name),
-		   Form("ErrorFlag==0 && asym_%s.Device_Error_Code!=0",
-			device_name),"same");
-    h_buff = (TH1D*)pad_buff->FindObject("htemp");
-    if(h_buff!=0)
-      h_buff->SetLineColor(kRed);
+    if(hAq!=0){
+      mul_tree->Draw(Form("asym_%s/ppm",device_name),
+		     Form("ErrorFlag==0 && asym_%s.Device_Error_Code!=0",
+			  device_name),"same");
+      h_buff = (TH1D*)pad_buff->FindObject("htemp");
+      if(h_buff!=0)
+	h_buff->SetLineColor(kRed);
+    }
     
     plot_title = Form("run%s_%s.png",
 		      run_seg.Data(),

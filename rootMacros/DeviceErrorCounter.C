@@ -12,7 +12,7 @@ void DeviceErrorCounter(TString device){
   pad1->SetGridx();
   pad1->Draw();
   pad1->cd();
-  gErrorIgnoreLevel = kWarning+1;   // shut up warnings;
+  // gErrorIgnoreLevel = kWarning+1;   // shut up warnings;
   gStyle->SetOptStat(0);
 
   // Copied from japan/QwTypes.h 
@@ -28,7 +28,7 @@ void DeviceErrorCounter(TString device){
   TTree* evt_tree = (TTree*)gROOT->FindObject("evt");
 
   const Int_t nErrorTypes = 9; // 8+1; Shifted by 1 for Good counts
-  TH1D *hdec = new TH1D("hdec",device+" Device  Error Counter",nErrorTypes,0,nErrorTypes); 
+  TH1D *hdec = new TH1D("hdec_"+device,device+" Device  Error Counter",nErrorTypes,0,nErrorTypes); 
   Int_t ErrorCounter[nErrorTypes];
   TString ErrorSelection[nErrorTypes];
   TString ErrorLabel[nErrorTypes] = {"Good",
@@ -54,24 +54,30 @@ void DeviceErrorCounter(TString device){
   ErrorSelection[0] = Form("%s.Device_Error_Code==0  && ErrorFlag==0 ",
 			   device.Data());
 
-  for(int i= 1; i<nErrorTypes ; i++)
-    ErrorSelection[i] = Form("(%s.Device_Error_Code & %d )== %d  && ErrorFlag==0 ",
-			     device.Data(),ErrorCode[i],ErrorCode[i]); 
+  if(ErrorSelection[0]==0)
+    return;
+  else{
+    for(int i= 1; i<nErrorTypes ; i++)
+      ErrorSelection[i] = Form("(%s.Device_Error_Code & %d )== %d  && ErrorFlag==0 ",
+			       device.Data(),ErrorCode[i],ErrorCode[i]); 
     // Device Error Counter that survives Global ErrorFlag
 
-  Double_t nTotal = evt_tree->Draw(device,"ErrorFlag==0","goff");
-  for(int i=0;i<nErrorTypes;i++){
-    int ibin = nErrorTypes-i;
-    ErrorCounter[i] = evt_tree->Draw(device,ErrorSelection[i],"goff");
-    hdec->SetBinContent(ibin,ErrorCounter[i]/nTotal*100.0);
-    hdec->GetXaxis()->SetBinLabel(ibin,ErrorLabel[i]);
-  }
+    Double_t nTotal = evt_tree->Draw(device,"ErrorFlag==0","goff");
+    for(int i=0;i<nErrorTypes;i++){
+      int ibin = nErrorTypes-i;
+      ErrorCounter[i] = evt_tree->Draw(device,ErrorSelection[i],"goff");
+      if(nTotal==0)
+	hdec->SetBinContent(ibin,0.0);
+      else
+	hdec->SetBinContent(ibin,ErrorCounter[i]/nTotal*100.0);
+      hdec->GetXaxis()->SetBinLabel(ibin,ErrorLabel[i]);
+    }
   
-  hdec->SetBarWidth(0.8);
-  hdec->SetBarOffset(0.1);
-  hdec->GetYaxis()->SetTitle("in Percentage");
-  hdec->GetXaxis()->SetLabelSize(0.06);
-  hdec->SetFillColor(49);
-  hdec->Draw("hbar");
-
+    hdec->SetBarWidth(0.8);
+    hdec->SetBarOffset(0.1);
+    hdec->GetYaxis()->SetTitle("in Percentage");
+    hdec->GetXaxis()->SetLabelSize(0.06);
+    hdec->SetFillColor(49);
+    hdec->Draw("hbar");
+   }
 }

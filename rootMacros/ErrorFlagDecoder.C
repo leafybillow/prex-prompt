@@ -4,14 +4,14 @@
 
 #include "TError.h"
 
-void ErrorFlagDecoder(){
+Bool_t ErrorFlagDecoder(){
 
   TPad *pad1 = new TPad("pad1","pad1",0,0,1,1);
   pad1->SetLeftMargin(0.2);
   pad1->SetGridx();
   pad1->Draw();
   pad1->cd();
-  gErrorIgnoreLevel = kWarning+1;   // shut up warnings;
+  // gErrorIgnoreLevel = kWarning+1;   // shut up warnings;
   gStyle->SetOptStat(0);
 
   // Copied from japan/QwTypes.h 
@@ -88,7 +88,6 @@ void ErrorFlagDecoder(){
     htotal->GetXaxis()->SetBinLabel(ibin,ErrorLabel[i]);
   }
 
-
   htotal->GetYaxis()->SetTitle("Counts");
   htotal->GetXaxis()->SetLabelSize(0.05);
   htotal->SetBarWidth(0.8);
@@ -109,4 +108,8 @@ void ErrorFlagDecoder(){
     RatioText[i]->Draw("same");
   }
 
+  if (ErrorCounter[0]==0)
+    return kFALSE;
+  else
+    return kTRUE;
 }

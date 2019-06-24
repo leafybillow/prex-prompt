@@ -35,8 +35,6 @@ void PlotSummary(TString filename){
   run_seg = filename(pfirst,plength);
   run_seg = run_seg.ReplaceAll('.','_');
   output_path = Form("./SummaryPlots/run%s/",run_seg.Data());
-  //  output_path = "./";
-  TString pdf_filename;
 
   //  Make sure we have the trees before proceeding.
   TTree *evt_tree = (TTree*)gROOT->FindObject("evt");
@@ -58,11 +56,29 @@ void PlotSummary(TString filename){
   if (evt_tree->GetEntries("ErrorFlag==0")==0){
     std::cout << "WARNING:  The event tree has no good events in file "
 	      << filename << "!" << std::endl;
+    // Make plots from BCM without ErrorFlag cuts
+    CheckBCM();
+    gSystem->Exec(Form("convert $(ls -rt %s*bcm*.png) %srun%s_summary_bcm.pdf",
+		       output_path.Data(),
+		       output_path.Data(),
+		       run_seg.Data()));
+
+    gSystem->Exec(Form("rm %s*bcm*.png",output_path.Data()));
+
     return;
   }
   if (mul_tree->GetEntries("ErrorFlag==0")==0){
     std::cout << "WARNING:  The multiplet tree has no good events in file "
 	      << filename << "!" << std::endl;
+    // Make plots from BCM without ErrorFlag cuts
+    CheckBCM();
+    gSystem->Exec(Form("convert $(ls -rt %s*bcm*.png) %srun%s_summary_bcm.pdf",
+		       output_path.Data(),
+		       output_path.Data(),
+		       run_seg.Data()));
+
+    gSystem->Exec(Form("rm %s*bcm*.png",output_path.Data()));
+
     return;
   }
   
@@ -99,6 +115,7 @@ void PlotSummary(TString filename){
   gSystem->Exec(Form("rm %s*sam*.png",output_path.Data()));
 
   //===== Check Regression =====   
+  /// FIXME Check mulc_lrb before making plots
   CheckRegression();
   CheckPairSAM();
 
@@ -109,7 +126,7 @@ void PlotSummary(TString filename){
   PlotInjBPMSAq();
   PlotInjBPMSDr();
   PlotInjBPMSAelli();
-  pdf_filename = Form("run%s_injector_BPM.pdf",run_seg.Data());
+  TString pdf_filename = Form("run%s_injector_BPM.pdf",run_seg.Data());
   gSystem->Exec(Form("convert $(ls -rt %srun%s*injector_BPM*.png) %s%s",
 		     output_path.Data(),
 		     run_seg.Data(),
