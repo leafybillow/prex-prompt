@@ -81,10 +81,6 @@ void CheckRegression(){
   vector<TString> vSAMV = {"asym_sam1","asym_sam3","asym_sam5","asym_sam7"};
   vector<TString> vMain = {"asym_usl","asym_dsl","asym_usr","asym_dsr"};
 
-  // vector<TString> vMain_corr = {"cor_usl","cor_dsr","cor_usr","cor_url"};
-  // vector<TString> vSAMU_corr = {"cor_sam2","cor_sam4","cor_sam6","cor_sam8"};
-  // vector<TString> vSAMV_corr = {"cor_sam1","cor_sam3","cor_sam5","cor_sam7"};
-
   // then check if they exist in LRB DVlist, otherwise erase them from plot queue
   CheckVariables(vMain, DVlist);
   CheckVariables(vSAMU, DVlist);
@@ -189,7 +185,7 @@ void CheckRegression(vector<TString > DVar, vector<TString> IVar,
   vector<double> dv_rms;
   
   for(int i=0;i<nDVar;i++){
-    mul_tree->Draw(Form("%s>>hdv%d",DVar[i].Data(),i),
+    mul_tree->Draw(Form("%s/ppm>>hdv%d",DVar[i].Data(),i),
 		   custom_cut,
 		   "goff");
     TH1D *hbuff = (TH1D*)gDirectory->FindObject(Form("hdv%d",i));
@@ -198,7 +194,7 @@ void CheckRegression(vector<TString > DVar, vector<TString> IVar,
   }
 
   for(int i=0;i<nIVar;i++){
-    mul_tree->Draw(Form("%s>>hiv%d",IVar[i].Data(),i),
+    mul_tree->Draw(Form("%s/um>>hiv%d",IVar[i].Data(),i),
 		   custom_cut,
 		   "goff");
     TH1D *hbuff = (TH1D*)gDirectory->FindObject(Form("hiv%d",i));
@@ -231,7 +227,7 @@ void CheckRegression(vector<TString > DVar, vector<TString> IVar,
       pad_buff =pad1->cd(icol+2+irow*(nIVar+1));
 
       if(draw_opt=="scat"){
-	mul_tree->Draw(Form("%s:%s",
+	mul_tree->Draw(Form("%s/ppm:%s/um",
 			    DVar[irow].Data(),IVar[icol].Data()),
 		       custom_cut);
 	h_buff = (TH1D*)pad_buff->FindObject("htemp");
@@ -239,7 +235,7 @@ void CheckRegression(vector<TString > DVar, vector<TString> IVar,
 	  h_buff->SetTitle("");
       }
       else if(draw_opt=="fit"){
-	mul_tree->Draw(Form("%s:%s",
+	mul_tree->Draw(Form("%s/ppm:%s/um",
 			    DVar[irow].Data(),IVar[icol].Data()),
 		       custom_cut,"prof");
 	h_buff = (TH1D*)pad_buff->FindObject("htemp");
@@ -269,7 +265,7 @@ void CheckRegression(vector<TString > DVar, vector<TString> IVar,
 	}
       }
       else{
-	mul_tree->Draw(Form("%s:%s",
+	mul_tree->Draw(Form("%s/ppm:%s/um",
 			    DVar[irow].Data(),IVar[icol].Data()),
 		   custom_cut,draw_opt);
 	h_buff = (TH1D*)pad_buff->FindObject("htemp");
