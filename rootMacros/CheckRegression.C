@@ -5,51 +5,117 @@
 //  	06-2019
 
 #include "device_list.h"
-void CheckRegression(vector<const char*> &DVar, vector<const char*> &IVar,
+void CheckRegression(vector<TString> DVar, vector<TString> IVar,
 		     TString draw_opt,
 		     TString user_cut);  // Generic
 void CheckRegression();
 
+void CheckVariables(vector<TString> &inputDV, vector<TString> lrbDV); // Check if input DV match lrbDV
+vector<TString> FormCorrectionVector(vector<TString> inputDV);
 
 void CheckRegression(){
 
+  // Get DV and IV list from slope files
+  TString run_dot_seg = run_seg;
+  run_dot_seg = run_dot_seg.ReplaceAll('_','.'); 
+
+  TString slopefile_name = Form("./LRBoutput/blueR%snew.slope.root",run_dot_seg.Data());
+  TFile* slopefile = TFile::Open(slopefile_name);
+  
+  if(slopefile==NULL){
+    cout << " Error: "
+	 << " blueR slope rootfile " << slopefile_name
+	 << " doesn't exist " << endl;
+    return;
+  }
+  
+  TH1D* hist_iv = (TH1D*)slopefile->Get("IVname");
+  TH1D* hist_dv = (TH1D*)slopefile->Get("DVname");
+
+  if(hist_iv==NULL || hist_dv==NULL){
+    cout << " Error: "
+	 << " DV or IV list is not found " << endl;
+    return;
+  }
+
+  vector< TString > IVlist;
+  vector< TString > DVlist;
+  
+  TAxis *ivAxis = hist_iv->GetXaxis();
+  TAxis *dvAxis = hist_dv->GetXaxis();
+  
+  Int_t nIV_lrb = ivAxis->GetLast(); // " returns fNBins if range not specified "
+  Int_t nDV_lrb = dvAxis->GetLast();
+
+  if(nIV_lrb==0 || nDV_lrb==0){
+    cout << " Error: "
+	 << " DV or IV list is empty " << endl;
+    return;
+  }
+
+  for(int i=0;i<nIV_lrb;i++){
+    const char* c_buff = ivAxis->GetBinLabel(i+1);
+    IVlist.push_back(TString(c_buff));
+  }
+
+  for(int i=0;i<nDV_lrb;i++){
+    const char* c_buff = dvAxis->GetBinLabel(i+1);
+    DVlist.push_back(TString(c_buff));
+  }
+  
+  slopefile->Close();
+
+  japanOutput->cd();
+  // 
+  TString blueRCut = "ErrorFlag==0";
+  for(int i=0;i<nDV_lrb;i++){
+    blueRCut +=Form("&& %s.Device_Error_Code==0",DVlist[i].Data());
+  }
+  for(int i=0;i<nIV_lrb;i++){
+    blueRCut +=Form("&& %s.Device_Error_Code==0",IVlist[i].Data());
+  }
+
   TString draw_opts[] = {"COLZ","fit","scat"};
 
-  vector<const char*> vSAM_raw = {"asym_sam2","asym_sam4","asym_sam6","asym_sam8"};
-  vector<const char*> vSAM_corr = {"cor_sam2","cor_sam4","cor_sam6","cor_sam8"};
-  vector<const char*> vDiffBPM = {"diff_bpm4aX","diff_bpm4aY",
-				  "diff_bpm4eX","diff_bpm4eY",
-				  "diff_bpm14X"};
+  vector<TString> vSAMU = {"asym_sam2","asym_sam4","asym_sam6","asym_sam8"};
+  vector<TString> vSAMV = {"asym_sam1","asym_sam3","asym_sam5","asym_sam7"};
+  vector<TString> vMain = {"asym_usl","asym_dsl","asym_usr","asym_dsr"};
 
-  vector<vector<const char*> > vDV ={vSAM_raw,vSAM_corr};
-  vector<vector<const char*> > vIV ={vDiffBPM,vDiffBPM};
-  Int_t nplots = vDV.size();
+  // vector<TString> vMain_corr = {"cor_usl","cor_dsr","cor_usr","cor_url"};
+  // vector<TString> vSAMU_corr = {"cor_sam2","cor_sam4","cor_sam6","cor_sam8"};
+  // vector<TString> vSAMV_corr = {"cor_sam1","cor_sam3","cor_sam5","cor_sam7"};
 
-  Int_t nsam = vSAM_raw.size();
-  Int_t nbpm = vDiffBPM.size();
+  // then check if they exist in LRB DVlist, otherwise erase them from plot queue
+  CheckVariables(vMain, DVlist);
+  CheckVariables(vSAMU, DVlist);
+  CheckVariables(vSAMV, DVlist);
 
-  Int_t nDV[]={nsam,nsam};
-  Int_t nIV[]={nsam,nbpm};
+  vector<vector<TString> > vDV_plot ={vSAMU,
+				      vSAMV,
+				      vMain};
+  Int_t nplots = vDV_plot.size();
 
-  vector<const char* > vtag_dv ={"asym_sam","corr_sam"};
-  vector<const char*> vtag_iv ={"diff_bpm","diff_bpm"};
+  vector<TString> vtag_dv ={"asym_sam2468",
+			    "asym_sam1357",
+			    "asym_maindet"};
 
   TCanvas* c_this = new TCanvas("","",2400,2400);
   for(int iplot=0;iplot<nplots;iplot++){
     for(int iopt=0;iopt<3;iopt++){
-      int ny = nDV[iplot];
-      int nx = nIV[iplot];
+      int ny = vDV_plot[iplot].size();
+      if(ny==0)
+	continue;
+      int nx = nIV_lrb;
       Int_t can_width = 2400/(nx+1);
       c_this->SetCanvasSize(2400,can_width*ny);
 
       c_this->cd();
-
-      CheckRegression(vDV[iplot],vIV[iplot],
+      CheckRegression(vDV_plot[iplot],IVlist,
   		      draw_opts[iopt],
-  		      "ErrorFlag==0");
-
+  		      blueRCut);
       plot_title  = Form("run%s_regression_%s_vs_%s-%s.png",
-  			 run_seg.Data(),vtag_dv[iplot],vtag_iv[iplot],
+  			 run_seg.Data(),
+			 vtag_dv[iplot].Data(),"diff_bpm",
   			 draw_opts[iopt].Data());
       TText *label = new TText(0.0,0.005,plot_title);     
       label->SetTextFont(23);
@@ -59,6 +125,32 @@ void CheckRegression(){
       label->Draw("same");
       c_this->SaveAs(output_path+plot_title);
       c_this->Clear("D");
+
+      vector<TString> vDV_corr = FormCorrectionVector(vDV_plot[iplot]);
+      c_this->cd();
+      TString correction_tag = vtag_dv[iplot];
+
+      Ssiz_t pos = correction_tag.First('_');
+      Ssiz_t length = correction_tag.Length();
+      correction_tag = (correction_tag)(pos,length-pos+1);
+      correction_tag = "cor"+correction_tag;
+
+      CheckRegression(vDV_corr,IVlist,
+  		      draw_opts[iopt],
+  		      blueRCut);
+      plot_title  = Form("run%s_regression_%s_vs_%s-%s.png",
+  			 run_seg.Data(),
+			 correction_tag.Data(),"diff_bpm",
+  			 draw_opts[iopt].Data());
+      label = new TText(0.0,0.005,plot_title);     
+      label->SetTextFont(23);
+      label->SetTextSize(70);
+      label->SetNDC();
+      c_this->cd();
+      label->Draw("same");
+      c_this->SaveAs(output_path+plot_title);
+      c_this->Clear("D");
+
     } // end of draw_opts loop
   } // end of plots loop
   gSystem->Exec(Form("convert $(ls -rt %s/*regression*.png) %s/run%s_summary_regression.pdf",
@@ -70,22 +162,20 @@ void CheckRegression(){
 }
 
 
-void CheckRegression(vector<const char* > &DVar, vector<const char*> &IVar,
+void CheckRegression(vector<TString > DVar, vector<TString> IVar,
 		     TString draw_opt,
-		     TString user_cut){
+		     TString custom_cut){
   // gStyle->SetStatW(0.2);
   // gStyle->SetStatH(0.2);
   // gStyle->SetStatX(1);
   // gStyle->SetStatY(1);
-  
+
   Int_t nDVar = DVar.size();
   Int_t nIVar = IVar.size();
 
   TTree *mul_tree = (TTree*)gROOT ->FindObject("mul");
   TTree *mulc_tree = (TTree*)gROOT ->FindObject("mulc_lrb");
   mul_tree->AddFriend(mulc_tree);
-
-  TString cuts = user_cut;
 
   TPad* pad1 = new TPad("pad1","pad1",0,0,1,1);
   pad1->Divide(nIVar+1, nDVar);
@@ -99,18 +189,18 @@ void CheckRegression(vector<const char* > &DVar, vector<const char*> &IVar,
   vector<double> dv_rms;
   
   for(int i=0;i<nDVar;i++){
-    mul_tree->Draw(Form("%s>>hdv%d",DVar[i],i),
-	       cuts+Form("&& %s.Device_Error_Code==0",DVar[i]),
-	       "goff");
+    mul_tree->Draw(Form("%s>>hdv%d",DVar[i].Data(),i),
+		   custom_cut,
+		   "goff");
     TH1D *hbuff = (TH1D*)gDirectory->FindObject(Form("hdv%d",i));
     dv_mean.push_back( hbuff->GetMean());
     dv_rms.push_back( hbuff->GetRMS() );
   }
 
   for(int i=0;i<nIVar;i++){
-    mul_tree->Draw(Form("%s>>hiv%d",IVar[i],i),
-	       cuts+Form("&& %s.Device_Error_Code==0",IVar[i]),
-	       "goff");
+    mul_tree->Draw(Form("%s>>hiv%d",IVar[i].Data(),i),
+		   custom_cut,
+		   "goff");
     TH1D *hbuff = (TH1D*)gDirectory->FindObject(Form("hiv%d",i));
     iv_mean.push_back( hbuff->GetMean());
     iv_rms.push_back( hbuff->GetRMS());
@@ -139,20 +229,19 @@ void CheckRegression(vector<const char* > &DVar, vector<const char*> &IVar,
     dv_txt[irow]->Draw();
     for(int icol=0; icol< nIVar; icol++){
       pad_buff =pad1->cd(icol+2+irow*(nIVar+1));
-      TString device_error_cut = Form("&& %s.Device_Error_Code==0 && %s.Device_Error_Code==0",
-				      IVar[icol],DVar[irow]);
+
       if(draw_opt=="scat"){
 	mul_tree->Draw(Form("%s:%s",
-			DVar[irow],IVar[icol]),
-		   cuts+device_error_cut);
+			    DVar[irow].Data(),IVar[icol].Data()),
+		       custom_cut);
 	h_buff = (TH1D*)pad_buff->FindObject("htemp");
 	if (h_buff!=NULL)
 	  h_buff->SetTitle("");
       }
       else if(draw_opt=="fit"){
 	mul_tree->Draw(Form("%s:%s",
-			     DVar[irow],IVar[icol]),
-			cuts+device_error_cut,"prof");
+			    DVar[irow].Data(),IVar[icol].Data()),
+		       custom_cut,"prof");
 	h_buff = (TH1D*)pad_buff->FindObject("htemp");
 	if (h_buff!=NULL){
 	  h_buff->SetTitle("");
@@ -181,8 +270,8 @@ void CheckRegression(vector<const char* > &DVar, vector<const char*> &IVar,
       }
       else{
 	mul_tree->Draw(Form("%s:%s",
-			DVar[irow],IVar[icol]),
-		   cuts,draw_opt);
+			    DVar[irow].Data(),IVar[icol].Data()),
+		   custom_cut,draw_opt);
 	h_buff = (TH1D*)pad_buff->FindObject("htemp");
 	if (h_buff!=NULL)
 	  h_buff->SetTitle("");
@@ -191,4 +280,49 @@ void CheckRegression(vector<const char* > &DVar, vector<const char*> &IVar,
       iv_txt[icol]->Draw("same");
     }
   }
+}
+
+
+void CheckVariables(vector<TString> &inputDV, vector<TString> lrbDV){
+
+  vector<TString>::iterator it_input = inputDV.begin();
+  int nDV_lrb = lrbDV.size();
+
+  while(it_input!= inputDV.end()){
+    Bool_t kFound = kFALSE;
+    
+    for(int i=0;i<nDV_lrb;i++){
+      int cmp_result = (*it_input).CompareTo(lrbDV[i]);
+      if(cmp_result==0){
+	kFound = kTRUE;
+	break;
+      }
+    }
+
+    if(!kFound){
+      cout << "-- Warning: "
+	   << *it_input << " is not found in LRB DV list." << endl;
+      it_input = inputDV.erase(it_input);
+      continue;
+    }
+
+    it_input++;
+  }
+
+}
+
+vector<TString> FormCorrectionVector(vector<TString> inputDV){
+  
+  vector<TString> vRet;
+  vector<TString>::iterator it_input = inputDV.begin();
+  
+  while(it_input != inputDV.end() ){
+    Ssiz_t pos = (*it_input).First('_');
+    Ssiz_t length = (*it_input).Length();
+    TString str_buff = (*it_input)(pos,length-pos+1);
+    str_buff = "cor"+str_buff;
+    vRet.push_back(str_buff);
+    it_input++;
+  }
+  return vRet;
 }

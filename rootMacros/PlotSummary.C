@@ -28,7 +28,7 @@
 
 void PlotSummary(TString filename){
 
-  TFile* rootfile = TFile::Open(filename);
+  japanOutput = TFile::Open(filename);
   Ssiz_t pfirst = filename.Last('_')+1;
   Ssiz_t plast = filename.Last('.')-1;
   Ssiz_t plength = plast-pfirst+1;

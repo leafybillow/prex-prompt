@@ -9,6 +9,7 @@ TString output_path;
 TString plot_title;
 Int_t run_number;
 TString run_seg;
+TFile *japanOutput;
 
 //  Beamline Monitors
 
