@@ -116,8 +116,15 @@ void PlotSummary(TString filename){
 
   //===== Check Regression =====   
   /// FIXME Check mulc_lrb before making plots
-  CheckRegression();
-  CheckPairSAM();
+  TTree *mulc_lrb_tree = (TTree*)gROOT->FindObject("mulc_lrb");
+  if (mulc_lrb_tree==NULL){
+    std::cout << "WARNING: The LRB correction tree was not found for file "
+	      << filename << "!" << std::endl;
+  }
+  else{
+    CheckRegression();
+    CheckPairSAM();
+  }
 
   // ===== Integrated Convergence 
   Integrated();
