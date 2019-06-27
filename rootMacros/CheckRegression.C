@@ -185,19 +185,19 @@ void CheckRegression(vector<TString > DVar, vector<TString> IVar,
   vector<double> dv_rms;
   
   for(int i=0;i<nDVar;i++){
-    mul_tree->Draw(Form("%s/ppm>>hdv%d",DVar[i].Data(),i),
+    mul_tree->Draw(Form("%s/ppm>>hdv%d_lrb",DVar[i].Data(),i),
 		   custom_cut,
 		   "goff");
-    TH1D *hbuff = (TH1D*)gDirectory->FindObject(Form("hdv%d",i));
+    TH1D *hbuff = (TH1D*)gDirectory->FindObject(Form("hdv%d_lrb",i));
     dv_mean.push_back( hbuff->GetMean());
     dv_rms.push_back( hbuff->GetRMS() );
   }
 
   for(int i=0;i<nIVar;i++){
-    mul_tree->Draw(Form("%s/um>>hiv%d",IVar[i].Data(),i),
+    mul_tree->Draw(Form("%s/um>>hiv%d_lrb",IVar[i].Data(),i),
 		   custom_cut,
 		   "goff");
-    TH1D *hbuff = (TH1D*)gDirectory->FindObject(Form("hiv%d",i));
+    TH1D *hbuff = (TH1D*)gDirectory->FindObject(Form("hiv%d_lrb",i));
     iv_mean.push_back( hbuff->GetMean());
     iv_rms.push_back( hbuff->GetRMS());
   }
