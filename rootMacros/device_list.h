@@ -33,6 +33,11 @@ vector<const char*> vCavBPM={"cav4b","cav4c","cav4d"};
 
 vector<const char*> vSAM={"sam2","sam4","sam6","sam8"};
 
+vector<const char*> vSAMUnity={"sam1","sam3","sam5","sam7"};
+
+vector<const char*> vMainDet={"usl","dsl","usr","dsr"};
+
+vector<const char*> vAT={"atl1","atl2","atr1","atr2"};
 
 vector<const char*> vBlkM = {"asym_bcm_an_ds3","asym_sam2","asym_sam4"};  // Block Monitors
 
