@@ -25,6 +25,7 @@
 #include "CheckComboSAM.C"
 #include "PlotErrorCounters.C"
 #include "Integrated.C"
+#include "CheckRegressedDetector.C"
 
 void Test(TString filename){
   japanOutput = TFile::Open(filename);
@@ -37,7 +38,7 @@ void Test(TString filename){
 
   // ===Check mulc_lrb before making plots
   // CheckComboSAM();
-  CheckSAMCorrelation();
+  CheckRegressedDetector();
 
 }
 

@@ -21,6 +21,7 @@
 #include "CheckSAM.C"
 #include "CheckDetector.C"
 #include "CheckDetectorCorrelation.C"
+#include "CheckRegressedDetector.C"
 #include "CheckSAMCorrelation.C"
 #include "CheckRegression.C"
 #include "CheckPairSAM.C"
@@ -115,6 +116,14 @@ void PlotSummary(TString filename){
   		     run_seg.Data()));
 
   gSystem->Exec(Form("rm %s*maindet*.png",output_path.Data()));
+
+  CheckRegressedDetector();
+  gSystem->Exec(Form("convert $(ls -rt %s*ratecheck*.png) %srun%s_summary_ratecheck.pdf",
+  		     output_path.Data(),
+		     output_path.Data(),
+  		     run_seg.Data()));
+
+  gSystem->Exec(Form("rm %s*ratecheck*.png",output_path.Data()));
 
   //===== SAM Plots =======
   CheckSAM();
