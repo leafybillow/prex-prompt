@@ -68,8 +68,9 @@ void Integrated(){
   }
   // ========= SAM =============
 
-  const char* sam_array[]={"sam2","sam6","sam4","sam8"};// FIXME
-  for(int isam=0;isam<4;isam++){
+  const char* sam_array[]={"sam2","sam6","sam4","sam8",
+			   "sam1","sam3","sam5","sam7"};
+  for(int isam=0;isam<8;isam++){
     this_can->cd(isam%2+1);
     Integrated("mul",
 	       "asym_"+TString(sam_array[isam]),
@@ -87,6 +88,28 @@ void Integrated(){
       this_can->Clear("D");
     }
   }
+  // ========= Detector =============
+  const char* maindet_array[]={"usl","usr","dsl","dsr"};
+
+  for(int idet=0;idet<4;idet++){
+    this_can->cd(idet%2+1);
+    Integrated("mul",
+	       "asym_"+TString(maindet_array[idet]),
+	       "ErrorFlag==0",
+	       20);
+
+    if(idet%2==1){
+      plot_title = Form("run%s_integrated_convergence_%s_%s.png",
+			run_seg.Data(),maindet_array[idet-1],maindet_array[idet]);
+      TText *label = new TText(0.0,0.01,plot_title);      
+      label->SetNDC();
+      this_can->cd();
+      label->Draw("same");
+      this_can->SaveAs(output_path+ plot_title);
+      this_can->Clear("D");
+    }
+  }
+
   gSystem->Exec(Form("convert $(ls -rt %s*integrated_convergence*.png) %srun%s_convergence.pdf",
 		     output_path.Data(),output_path.Data(),run_seg.Data()));
 
