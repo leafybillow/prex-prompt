@@ -134,16 +134,30 @@ void PlotCorrelation(vector<const char* > &DVar_src, vector<const char*> &IVar_s
   for(int i=0;i<nDVar;i++){
     tree->Draw(Form("%s>>hdv%d",DVar[i].Data(),i),cuts,"goff");
     TH1D *hbuff = (TH1D*)gDirectory->FindObject(Form("hdv%d",i));
-    dv_mean.push_back( hbuff->GetMean());
-    dv_rms.push_back( hbuff->GetRMS() );
+    if(hbuff!=NULL){
+      dv_mean.push_back( hbuff->GetMean());
+      dv_rms.push_back( hbuff->GetRMS() );
+    }
+    else{
+      DVar.erase(DVar.begin()+i);
+      i--;
+    }
   }
-
+  nDVar = DVar.size();
+  
   for(int i=0;i<nIVar;i++){
     tree->Draw(Form("%s>>hiv%d",IVar[i].Data(),i),cuts,"goff");
     TH1D *hbuff = (TH1D*)gDirectory->FindObject(Form("hiv%d",i));
-    iv_mean.push_back( hbuff->GetMean());
-    iv_rms.push_back( hbuff->GetRMS());
+    if(hbuff!=NULL){
+      iv_mean.push_back( hbuff->GetMean());
+      iv_rms.push_back( hbuff->GetRMS());
+    }
+    else{
+      IVar.erase(IVar.begin()+i);
+      i--;
+    }
   }
+  nIVar = IVar.size();
 
   vector<TText * > dv_txt;
   vector<TText * > iv_txt;
@@ -173,37 +187,40 @@ void PlotCorrelation(vector<const char* > &DVar_src, vector<const char*> &IVar_s
 			DVar[irow].Data(),IVar[icol].Data()),
 		   cuts);
 	h_buff = (TH1D*)pad_buff->FindObject("htemp");
-	h_buff->SetTitle("");
+	if(h_buff!=NULL)
+	  h_buff->SetTitle("");
       }
       else if(draw_opt=="fit"){
 	tree->Draw(Form("%s:%s",
 			DVar[irow].Data(),IVar[icol].Data()),
 		   cuts,"prof");
 	h_buff = (TH1D*)pad_buff->FindObject("htemp");
-	h_buff->SetTitle("");
-	h_buff->Fit("pol1","QR","",
+	if(h_buff!=NULL){
+	  h_buff->SetTitle("");
+	  h_buff->Fit("pol1","QR","",
 		    iv_mean[icol]-2*iv_rms[icol],
 		    iv_mean[icol]+2*iv_rms[icol]);
-	pad_buff->Update();
-	TF1 *f1 = h_buff->GetFunction("pol1");
-	if (f1!=NULL){
-	  Double_t slope = f1->GetParameter(1);
-	  TPaveStats* st = (TPaveStats*)h_buff->FindObject("stats");
-	  st->SetOptFit(1);
-	  st->SetOptStat(0);
-	  if(slope<0){
-	    st->SetX2NDC(1.0);
-	    st->SetY2NDC(0.9);
-	    st->SetX1NDC(0.5);
-	    st->SetY1NDC(0.6);
-	  }
-	  else{
-	    st->SetX2NDC(0.5);
-	    st->SetY2NDC(0.6);
-	    st->SetX1NDC(0.0);
-	    st->SetY1NDC(0.9);
-	  }
-	}
+	  pad_buff->Update();
+	  TF1 *f1 = h_buff->GetFunction("pol1");
+	  if (f1!=NULL){
+	    Double_t slope = f1->GetParameter(1);
+	    TPaveStats* st = (TPaveStats*)h_buff->FindObject("stats");
+	    st->SetOptFit(1);
+	    st->SetOptStat(0);
+	    if(slope<0){
+	      st->SetX2NDC(1.0);
+	      st->SetY2NDC(0.9);
+	      st->SetX1NDC(0.5);
+	      st->SetY1NDC(0.6);
+	    }
+	    else{
+	      st->SetX2NDC(0.5);
+	      st->SetY2NDC(0.6);
+	      st->SetX1NDC(0.0);
+	      st->SetY1NDC(0.9);
+	    }
+	  } // end of if f1!=NULL
+	}// end of if h_buff!=NULL
       }
       else{
 	tree->Draw(Form("%s:%s",
