@@ -19,6 +19,8 @@
 #include "CheckBPM.C"
 #include "PlotBPMDiffCorrelation.C"
 #include "CheckSAM.C"
+#include "CheckDetector.C"
+#include "CheckDetectorCorrelation.C"
 #include "CheckSAMCorrelation.C"
 #include "CheckRegression.C"
 #include "CheckPairSAM.C"
@@ -105,6 +107,16 @@ void PlotSummary(TString filename){
   gSystem->Exec(Form("rm %s*bpm*.png",output_path.Data()));
 
   //===== SAM Plots =======
+  CheckDetector();
+  CheckDetectorCorrelation();
+  gSystem->Exec(Form("convert $(ls -rt %s*maindet*.png) %srun%s_summary_main_detector.pdf",
+  		     output_path.Data(),
+		     output_path.Data(),
+  		     run_seg.Data()));
+
+  gSystem->Exec(Form("rm %s*maindet*.png",output_path.Data()));
+
+  //===== SAM Plots =======
   CheckSAM();
   CheckSAMCorrelation();
   gSystem->Exec(Form("convert $(ls -rt %s*sam*.png) %srun%s_summary_sam.pdf",
@@ -115,7 +127,7 @@ void PlotSummary(TString filename){
   gSystem->Exec(Form("rm %s*sam*.png",output_path.Data()));
 
   //===== Check Regression =====   
-  /// FIXME Check mulc_lrb before making plots
+
   TTree *mulc_lrb_tree = (TTree*)gROOT->FindObject("mulc_lrb");
   if (mulc_lrb_tree==NULL){
     std::cout << "WARNING: The LRB correction tree was not found for file "

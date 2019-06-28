@@ -36,7 +36,8 @@ void Test(TString filename){
   output_path = "./";
 
   // ===Check mulc_lrb before making plots
-  CheckComboSAM();
+  // CheckComboSAM();
+  CheckSAMCorrelation();
 
 }
 
