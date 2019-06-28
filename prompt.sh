@@ -36,5 +36,5 @@ timenow=$(date +"%Y-%m%d-%H%M");
 # BeamMod Instant correction and summary (FIXME)
 
 # Make Summary Plots/Text and sync to HallA onlineWeb
-#./summary.sh $runnum;
+./summary.sh $runnum;
     
