@@ -149,7 +149,11 @@ void CheckRegression(){
 
     } // end of draw_opts loop
   } // end of plots loop
-  gSystem->Exec(Form("convert $(ls -rt %s/*regression*.png) %s/run%s_summary_regression.pdf",
+  gSystem->Exec(Form("convert $(ls -rt %s/*regression*sam*.png) %s/run%s_summary_regression_sam.pdf",
+		     output_path.Data(),
+		     output_path.Data(),
+		     run_seg.Data()));
+  gSystem->Exec(Form("convert $(ls -rt %s/*regression*maindet*.png) %s/run%s_summary_regression_maindet.pdf",
 		     output_path.Data(),
 		     output_path.Data(),
 		     run_seg.Data()));

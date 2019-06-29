@@ -165,9 +165,11 @@ void CheckComboSAM(vector<TString> vDet, TString tag, TString user_cut){
 			 vDet[i].Data(),hist_name.Data()),
 		    user_cut,"prof");
     hfit = (TH2D*)gDirectory->FindObject(hist_name);
-    low = hfit->GetMean()-2*hfit->GetRMS();
-    up = hfit->GetMean()+2*hfit->GetRMS();
-    hfit->Fit("pol1","QR","",low,up);
+    if(hfit!=NULL){
+      low = hfit->GetMean()-2*hfit->GetRMS();
+      up = hfit->GetMean()+2*hfit->GetRMS();
+      hfit->Fit("pol1","QR","",low,up);
+    }
   } 
   filename = Form("run%s_combo_%s_vs_AqDS.png",
 		  run_seg.Data(),
@@ -193,9 +195,11 @@ void CheckComboSAM(vector<TString> vDet, TString tag, TString user_cut){
 			 vDet[i].Data(),hist_name.Data()),
 		    user_cut,"prof");
     hfit = (TH2D*)gDirectory->FindObject(hist_name);
-    low = hfit->GetMean()-2*hfit->GetRMS();
-    up = hfit->GetMean()+2*hfit->GetRMS();
-    hfit->Fit("pol1","QR","",low,up);
+    if(hfit!=NULL){
+      low = hfit->GetMean()-2*hfit->GetRMS();
+      up = hfit->GetMean()+2*hfit->GetRMS();
+      hfit->Fit("pol1","QR","",low,up);
+    }
   } 
 
   filename = Form("run%s_combo_%s_vs_AqUS.png",

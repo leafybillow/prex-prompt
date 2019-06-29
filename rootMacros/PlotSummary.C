@@ -25,6 +25,7 @@
 #include "CheckSAMCorrelation.C"
 #include "CheckRegression.C"
 #include "CheckPairSAM.C"
+#include "CheckComboSAM.C"
 
 #include "PlotErrorCounters.C"
 #include "Integrated.C"
@@ -144,7 +145,7 @@ void PlotSummary(TString filename){
   }
   else{
     CheckRegression();
-    CheckPairSAM();
+    CheckComboSAM();
   }
 
   // ===== Integrated Convergence 
