@@ -22,10 +22,10 @@ void CheckComboSAM(vector<TString> vDet, TString tag, TString user_cut){
   TTree *mulc_tree = (TTree*)gROOT ->FindObject("mulc_lrb");
   mulc_tree->AddFriend(mul_tree);
 
-  mulc_tree->SetAlias("AqDS", "asym_bcm_an_ds3/ppm");
-  mulc_tree->SetAlias("AqUS", "asym_bcm_an_us/ppm");
+  mulc_tree->SetAlias("AqDS", "asym_bcm_an_ds3");
+  mulc_tree->SetAlias("AqUS", "asym_bcm_an_us");
   mulc_tree->SetAlias("AverageLumi",
-		      Form("(%s+%s+%s+%s)/4/ppm",
+		      Form("(%s+%s+%s+%s)/4",
 			   vDet[0].Data(),vDet[1].Data(),vDet[2].Data(),vDet[3].Data()));
 
 
@@ -49,24 +49,24 @@ void CheckComboSAM(vector<TString> vDet, TString tag, TString user_cut){
   TCanvas *c1 = new TCanvas("c1","c1",2400,1600);
   c1->Divide(3,2);
   c1->cd(1);
-  mulc_tree->Draw(Form("%s/ppm",vDet[0].Data()),
+  mulc_tree->Draw(Form("%s/ppm-AqDS/ppm",vDet[0].Data()),
 		  user_cut);
   c1->cd(2);
-  mulc_tree->Draw(Form("%s/ppm",vDet[1].Data())
+  mulc_tree->Draw(Form("%s/ppm-AqDS/ppm",vDet[1].Data())
 		  ,user_cut);
   c1->cd(3);
-  mulc_tree->Draw(Form("%s/ppm : %s/ppm",vDet[0].Data(),vDet[1].Data()),
+  mulc_tree->Draw(Form("%s/ppm-AqDS/ppm : %s/ppm-AqDS/ppm",vDet[0].Data(),vDet[1].Data()),
 		  user_cut);
   c1->cd(4);
-  mulc_tree->Draw(Form("%s/ppm : %s/ppm",vDet[0].Data(),vDet[1].Data()),
+  mulc_tree->Draw(Form("%s/ppm-AqDS/ppm : %s/ppm-AqDS/ppm",vDet[0].Data(),vDet[1].Data()),
 		  user_cut,"prof");
 
   c1->cd(5);
-  mulc_tree->Draw(Form("%s/ppm - %s/ppm",vDet[0].Data(),vDet[1].Data()),
+  mulc_tree->Draw(Form("(%s/ppm - %s/ppm)/2",vDet[0].Data(),vDet[1].Data()),
 		  user_cut);
 
   c1->cd(6);  
-  mulc_tree->Draw(Form("%s/ppm + %s/ppm",vDet[0].Data(),vDet[1].Data()),
+  mulc_tree->Draw(Form("(%s/ppm + %s/ppm)/2-AqDS/ppm",vDet[0].Data(),vDet[1].Data()),
 		  user_cut);
 
   filename = Form("run%s_combo_%s_vs_%s.png",
@@ -83,24 +83,24 @@ void CheckComboSAM(vector<TString> vDet, TString tag, TString user_cut){
 
   // The other pair
   c1->cd(1);
-  mulc_tree->Draw(Form("%s/ppm",vDet[2].Data()),
+  mulc_tree->Draw(Form("%s/ppm-AqDS/ppm",vDet[2].Data()),
 		  user_cut);
   c1->cd(2);
-  mulc_tree->Draw(Form("%s/ppm",vDet[3].Data())
+  mulc_tree->Draw(Form("%s/ppm -AqDS/ppm",vDet[3].Data())
 		  ,user_cut);
   c1->cd(3);
-  mulc_tree->Draw(Form("%s/ppm : %s/ppm",vDet[2].Data(),vDet[3].Data()),
+  mulc_tree->Draw(Form("%s/ppm -AqDS/ppm : %s/ppm -AqDS/ppm",vDet[2].Data(),vDet[3].Data()),
 		  user_cut);
   c1->cd(4);
-  mulc_tree->Draw(Form("%s/ppm : %s/ppm",vDet[2].Data(),vDet[3].Data()),
+  mulc_tree->Draw(Form("%s/ppm -AqDS/ppm : %s/ppm -AqDS/ppm",vDet[2].Data(),vDet[3].Data()),
 		  user_cut,"prof");
 
   c1->cd(5);
-  mulc_tree->Draw(Form("%s/ppm - %s/ppm",vDet[2].Data(),vDet[3].Data()),
+  mulc_tree->Draw(Form("(%s/ppm - %s/ppm)/2",vDet[2].Data(),vDet[3].Data()),
 		  user_cut);
 
   c1->cd(6);  
-  mulc_tree->Draw(Form("%s/ppm + %s/ppm",vDet[2].Data(),vDet[3].Data()),
+  mulc_tree->Draw(Form("(%s/ppm + %s/ppm)/2-AqDS/ppm",vDet[2].Data(),vDet[3].Data()),
 		  user_cut);
 
   filename = Form("run%s_combo_%s_vs_%s.png",
@@ -120,13 +120,13 @@ void CheckComboSAM(vector<TString> vDet, TString tag, TString user_cut){
   TCanvas *c4 = new TCanvas("c4","c4",2400,2400);
   c4->Divide(2,2);
   c4->cd(1);
-  mulc_tree->Draw(Form("(%s+%s)/2/ppm ",vDet[0].Data(),vDet[1].Data()),
+  mulc_tree->Draw(Form("(%s+%s)/2/ppm -AqDS/ppm ",vDet[0].Data(),vDet[1].Data()),
 		  user_cut);
   c4->cd(2);
-  mulc_tree->Draw(Form("(%s+%s)/2/ppm ",vDet[2].Data(),vDet[3].Data()),
+  mulc_tree->Draw(Form("(%s+%s)/2/ppm -AqDS/ppm ",vDet[2].Data(),vDet[3].Data()),
 		  user_cut);
   c4->cd(3);
-  mulc_tree->Draw(Form("(%s+%s)/2/ppm:(%s+%s)/2/ppm ",
+  mulc_tree->Draw(Form("(%s+%s)/2/ppm -AqDS/ppm:(%s+%s)/2/ppm -AqDS/ppm ",
 		       vDet[0].Data(),vDet[1].Data(),
 		       vDet[2].Data(),vDet[3].Data()),
 		  user_cut);
@@ -157,11 +157,11 @@ void CheckComboSAM(vector<TString> vDet, TString tag, TString user_cut){
   //  ======== vSAM vs AqDS
   for(int i=0;i<4;i++){
     c0->cd(i+1);
-    mulc_tree->Draw(Form("%s/ppm:AqDS",vDet[i].Data())
+    mulc_tree->Draw(Form("%s/ppm:AqDS/ppm",vDet[i].Data())
 		    ,user_cut);
     c0->cd(i+5);
     TString hist_name = "hds" +vDet[i];
-    mulc_tree->Draw(Form("%s/ppm:AqDS>>%s",
+    mulc_tree->Draw(Form("%s/ppm:AqDS/ppm>>%s",
 			 vDet[i].Data(),hist_name.Data()),
 		    user_cut,"prof");
     hfit = (TH2D*)gDirectory->FindObject(hist_name);
@@ -185,13 +185,13 @@ void CheckComboSAM(vector<TString> vDet, TString tag, TString user_cut){
   for(int i=0;i<4;i++){
 
     c0->cd(i+1);
-    mulc_tree->Draw(Form("%s/ppm:AqUS",vDet[i].Data())
+    mulc_tree->Draw(Form("%s/ppm:AqUS/ppm",vDet[i].Data())
 		    ,user_cut);
 
     c0->cd(i+5);
     
     TString hist_name = "hus" +vDet[i];
-    mulc_tree->Draw(Form("%s/ppm:AqUS>>%s",
+    mulc_tree->Draw(Form("%s/ppm:AqUS/ppm>>%s",
 			 vDet[i].Data(),hist_name.Data()),
 		    user_cut,"prof");
     hfit = (TH2D*)gDirectory->FindObject(hist_name);
@@ -217,13 +217,13 @@ void CheckComboSAM(vector<TString> vDet, TString tag, TString user_cut){
 
   c4->Clear("D");
   c4->cd(1);
-  mulc_tree->Draw("AqUS",user_cut);
+  mulc_tree->Draw("AqUS/ppm",user_cut);
   c4->cd(2);
-  mulc_tree->Draw("AverageLumi",user_cut);
+  mulc_tree->Draw("AverageLumi/ppm",user_cut);
   c4->cd(3);
-  mulc_tree->Draw("AverageLumi:AqUS",user_cut);
+  mulc_tree->Draw("AverageLumi/ppm:AqUS/ppm",user_cut);
   c4->cd(4);
-  mulc_tree->Draw("AverageLumi-AqUS",user_cut);
+  mulc_tree->Draw("AverageLumi/ppm-AqUS/ppm",user_cut);
 
   filename = Form("run%s_combo_%s_AqUS_dd.png",
 		  run_seg.Data(),
@@ -237,13 +237,13 @@ void CheckComboSAM(vector<TString> vDet, TString tag, TString user_cut){
 
   c4->Clear("D");
   c4->cd(1);
-  mulc_tree->Draw("AqDS",user_cut);
+  mulc_tree->Draw("AqDS/ppm",user_cut);
   c4->cd(2);
-  mulc_tree->Draw("AverageLumi",user_cut);
+  mulc_tree->Draw("AverageLumi/ppm",user_cut);
   c4->cd(3);
-  mulc_tree->Draw("AverageLumi:AqDS",user_cut);
+  mulc_tree->Draw("AverageLumi/ppm:AqDS/ppm",user_cut);
   c4->cd(4);
-  mulc_tree->Draw("AverageLumi-AqDS",user_cut);
+  mulc_tree->Draw("AverageLumi/ppm-AqDS/ppm",user_cut);
 
   filename = Form("run%s_combo_%s_AqDS_dd.png",
 		  run_seg.Data(),
