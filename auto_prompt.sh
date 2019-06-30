@@ -37,7 +37,7 @@ fi
 
 while [ $thisrun -le $rcnum ]; do
     if [ $thisrun -lt $rcnum ]; then
-	if [[ $(find $JAPAN_OUTPUT_DIR -type f -iname "*$thisrun*" 2> /dev/null) ]]; then
+	if [[ $(find $JAPAN_OUTPUT_DIR -type f -iname "*rompt*$thisrun*" 2> /dev/null) ]]; then
 	    if [[ $reanalyze -eq 1 ]]; then
 		echo "Launch replay for $thisrun"
 		./prompt.sh $thisrun
@@ -62,7 +62,7 @@ while [ $thisrun -le $rcnum ]; do
 	if ((timediff > min_time_passed)); then
 	    # Consider the run has been finished already
 	    # Check if there is root file created
-	    if [[ $(find $JAPAN_OUTPUT_DIR -type f -iname "*$thisrun*" 2> /dev/null) ]]; then
+	    if [[ $(find $JAPAN_OUTPUT_DIR -type f -iname "*rompt*$thisrun*" 2> /dev/null) ]]; then
 		echo "====The last run analysis already launched===="
 	    else
 		echo "Launch replay for $thisrun"
