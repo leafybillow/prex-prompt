@@ -61,10 +61,6 @@ void CheckRegressedDetector(){
 		 "prof");
   plot_title = Form("run%s_downstreamLR_ratecheck_raw.png",run_seg.Data());
 
-  // Regression Corrected
-  TH1 *hfit, *h_buff;
-  Double_t low,up;
-  // Upstream
   t1 = new TText(0.0,0.007,plot_title);
   t1->SetNDC();
   t1->SetTextSize(0.05);
@@ -73,6 +69,16 @@ void CheckRegressedDetector(){
   c1->SaveAs(output_path+plot_title);
   c1->Clear("D");
 
+
+  // Regression Corrected
+  c1->SetCanvasSize(2400,1200);
+  c1->Clear();
+  c1->Divide(4,2);
+  c1->cd(1);
+  // Upstream
+  TH1 *hfit, *h_buff;
+  Double_t low,up;
+  
   c1->cd(1);
   mul_tree->Draw("cor_usl/ppm-Aq/ppm","ErrorFlag==0");
   c1->cd(2);
@@ -80,10 +86,6 @@ void CheckRegressedDetector(){
   c1->cd(3);
   mul_tree->Draw("cor_usl/ppm-Aq/ppm:cor_usr/ppm-Aq/ppm","ErrorFlag==0");
   c1->cd(4);
-  mul_tree->Draw("(cor_usl/ppm-cor_usr/ppm)/2","ErrorFlag==0");
-  c1->cd(5);
-  mul_tree->Draw("(cor_usl/ppm+cor_usr/ppm)/2-Aq/ppm","ErrorFlag==0");
-  c1->cd(6);
   mul_tree->Draw("cor_usl/ppm-Aq/ppm:cor_usr/ppm-Aq/ppm>>hcoruslr","ErrorFlag==0",
 		 "prof");
   gPad->Update();
@@ -102,6 +104,24 @@ void CheckRegressedDetector(){
     up = hfit->GetMean()+2*(hfit->GetRMS());
     hfit->Fit("pol1","QR","",low,up);
   } 
+  TVirtualPad *pad_buff;
+  pad_buff = c1->cd(5);
+  mul_tree->Draw("(cor_usl/ppm-cor_usr/ppm)/2","ErrorFlag==0");
+
+  pad_buff = c1->cd(6);
+  mul_tree->Draw("(cor_usl/ppm-cor_usr/ppm)/2:pattern_number","ErrorFlag==0","COL");
+  TH2F *h2dus_buff = (TH2F*)pad_buff->FindObject("htemp");
+  if(h2dus_buff!=NULL)
+    h2dus_buff->Draw("candlex3");  
+
+  c1->cd(7);
+  mul_tree->Draw("(cor_usl/ppm+cor_usr/ppm)/2-Aq/ppm","ErrorFlag==0");
+
+  pad_buff= c1->cd(8);
+  mul_tree->Draw("(cor_usl/ppm+cor_usr/ppm)/2-Aq/ppm:Entry$","ErrorFlag==0","COL");
+  TH2F *h2dussum_buff = (TH2F*)pad_buff->FindObject("htemp");
+  if(h2dussum_buff!=NULL)
+    h2dussum_buff->Draw("candlex3");  
 
   plot_title = Form("run%s_upstreamLR_ratecheck_reg.png",run_seg.Data());
 
@@ -121,10 +141,6 @@ void CheckRegressedDetector(){
   c1->cd(3);
   mul_tree->Draw("cor_dsl/ppm-Aq/ppm:cor_dsr/ppm-Aq/ppm","ErrorFlag==0");
   c1->cd(4);
-  mul_tree->Draw("(cor_dsl/ppm-cor_dsr/ppm)/2","ErrorFlag==0");
-  c1->cd(5);
-  mul_tree->Draw("(cor_dsl/ppm+cor_dsr/ppm)/2-Aq/ppm","ErrorFlag==0");
-  c1->cd(6);
   mul_tree->Draw("cor_dsl/ppm-Aq/ppm:cor_dsr/ppm-Aq/ppm>>hcordslr","ErrorFlag==0",
 		 "prof");
   gPad->Update();
@@ -144,6 +160,24 @@ void CheckRegressedDetector(){
     hfit->Fit("pol1","QR","",low,up);
 
   } 
+
+  c1->cd(5);
+  mul_tree->Draw("(cor_dsl/ppm-cor_dsr/ppm)/2","ErrorFlag==0");
+
+  pad_buff=c1->cd(6);
+  mul_tree->Draw("(cor_dsl/ppm-cor_dsr/ppm)/2:Entry$","ErrorFlag==0","COL");
+  TH2F *h2dds_buff = (TH2F*)pad_buff->FindObject("htemp");
+  if(h2dds_buff!=NULL)
+    h2dds_buff->Draw("candlex3");  
+
+  c1->cd(7);
+  mul_tree->Draw("(cor_dsl/ppm+cor_dsr/ppm)/2-Aq/ppm","ErrorFlag==0");
+
+  c1->cd(8);
+  mul_tree->Draw("(cor_dsl/ppm+cor_dsr/ppm)/2-Aq/ppm:Entry$","ErrorFlag==0","COL");
+  TH2F *h2ddssum_buff = (TH2F*)pad_buff->FindObject("htemp");
+  if(h2ddssum_buff!=NULL)
+    h2ddssum_buff->Draw("candlex3");  
     
   plot_title = Form("run%s_downstreamLR_ratecheck_reg.png",run_seg.Data());
 
