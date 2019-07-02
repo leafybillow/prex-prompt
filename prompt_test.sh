@@ -16,9 +16,9 @@ done
 #JAPAN First Pass
 timenow=$(date +"%Y-%m%d-%H%M");
 
-./qwparity -r $runnum -c prex_cprompt.conf \
+./qwparity -r $runnum -c prex_prompt.conf \
     --event 0:100000 \
-    --rootfile-stem prexCprompt_pass1_ \
+    --rootfile-stem prexPrompt_pass1_ \
     --QwLog.logfile ./LogFiles/QwLog_run$runnum\_prompt_pass1_$timenow.txt ;
 
 # cp ./japanOutput/summary_$runnum.txt \
@@ -27,9 +27,9 @@ timenow=$(date +"%Y-%m%d-%H%M");
 #JAPAN Second Pass
 timenow=$(date +"%Y-%m%d-%H%M");
 
-./qwparity -r $runnum -c prex_cprompt.conf \
+./qwparity -r $runnum -c prex_prompt.conf \
     --event 0:100000 \
-    --rootfile-stem prexCprompt_pass2_ \
+    --rootfile-stem prexPrompt_pass2_ \
     --QwLog.logfile ./LogFiles/QwLog_run$runnum\_prompt_pass2_$timenow.txt ;
 
 # BeamMod Data Extraction (FIXME)
