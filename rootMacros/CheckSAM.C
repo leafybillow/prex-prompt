@@ -11,6 +11,7 @@ void CheckSAM(){
   gStyle->SetStatH(0.4);
 
   Int_t nsam = vSAM.size();
+  nsam += vSAMUnity.size();
   TTree *evt_tree = (TTree*)gROOT->FindObject("evt");
   TTree *mul_tree = (TTree*)gROOT->FindObject("mul");
   
@@ -24,21 +25,27 @@ void CheckSAM(){
   TGraph* g_buff;
 
   for(int isam=0;isam<nsam;isam++){
-    const char* device_name = vSAM[isam];
-    
+    TString det_name;
+    if(isam<4)
+      det_name = TString(vSAM[isam]);
+    else
+      det_name = TString(vSAMUnity[isam-4]);
+
+    const char* device_name = det_name.Data();
+
     pad_buff = c1->cd(1);
     evt_tree->Draw(Form("%s:Entry$",device_name),"","l");
     g_buff = (TGraph*)pad_buff->FindObject("Graph");
     g_buff->SetName("GraphAll");
     evt_tree->Draw(Form("%s:Entry$",device_name),"ErrorFlag!=0","* same");
     g_buff = (TGraph*)pad_buff->FindObject("Graph");
-    g_buff->SetMarkerColor(kRed);
+    if(g_buff!=NULL)
+      g_buff->SetMarkerColor(kRed);
 
     pad_buff=c1->cd(2);
     evt_tree->Draw(Form("%s",device_name),"ErrorFlag==0","");
     h_buff=(TH1D*)pad_buff->FindObject("htemp");
     h_buff->SetName("evtTree");
-    
     evt_tree->Draw(Form("%s",device_name),
 	      Form("ErrorFlag==0 && %s.Device_Error_Code!=0",device_name),
 	      "same");
