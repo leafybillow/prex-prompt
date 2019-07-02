@@ -16,7 +16,7 @@ TFile *japanOutput;
 vector<const char*> vBCM={"bcm_an_us", "bcm_an_ds", 
 			  "bcm_an_ds3","bcm0l02"};
 
-vector<const char*> vBPM={"bpm4a","bpm4e","bpm12","bpm12","bpm14"};
+vector<const char*> vBPM={"bpm4a","bpm4e","bpm8","bpm12","bpm14"};
 
 vector<const char*> vBPMXY={"bpm4aX","bpm4aY",
 			    "bpm4eX","bpm4eY",
