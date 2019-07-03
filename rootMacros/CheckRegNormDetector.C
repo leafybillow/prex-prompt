@@ -1,11 +1,11 @@
-// CheckRegressedDetector.C : 
+// CheckRegNormDetector.C : 
 //	ROOT script for checking regressed Detector signal from mulc_lrb tree
 //
 // author : Tao Ye <tao.ye@stonybrook.edu>
 // 	 06-2019
 
 
-void CheckRegressedDetector(){
+void CheckRegNormDetector(){
 
   gStyle->SetStatW(0.3);
   gStyle->SetStatH(0.4);

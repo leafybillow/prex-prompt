@@ -1,22 +1,22 @@
-// CheckComboSAM.C : 
+// CheckNormalizedComboSAM.C : 
 //	ROOT script for SAM resolution check for japan Ouputs
 //
 //  author: Tao Ye 
 //  	06-2019
 
 #include "device_list.h"
-void CheckComboSAM(vector<TString> vDet, TString tag,TString user_cut);
+void CheckNormalizedComboSAM(vector<TString> vDet, TString tag,TString user_cut);
 
-void CheckComboSAM(){
+void CheckNormalizedComboSAM(){
 
   vector<TString> vSAMU = {"cor_sam2","cor_sam6","cor_sam4","cor_sam8"};
   vector<TString> vSAMV = {"cor_sam1","cor_sam5","cor_sam3","cor_sam7"};
 
-  CheckComboSAM(vSAMU,"cor_sam2648","ErrorFlag==0");  // FIXME : It should be device_Error_Code  (Maybe ... )
-  CheckComboSAM(vSAMV,"cor_sam1537","ErrorFlag==0");
+  CheckNormalizedComboSAM(vSAMU,"cor_sam2648","ErrorFlag==0");  // FIXME : It should be device_Error_Code  (Maybe ... )
+  CheckNormalizedComboSAM(vSAMV,"cor_sam1537","ErrorFlag==0");
 
 }
-void CheckComboSAM(vector<TString> vDet, TString tag, TString user_cut){
+void CheckNormalizedComboSAM(vector<TString> vDet, TString tag, TString user_cut){
 
   TTree *mul_tree = (TTree*)gROOT ->FindObject("mul");
   TTree *mulc_tree = (TTree*)gROOT ->FindObject("mulc_lrb");

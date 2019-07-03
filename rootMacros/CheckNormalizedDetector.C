@@ -1,4 +1,4 @@
-// CheckDetector.C : 
+// CheckNormalizedDetector.C : 
 //	ROOT script for checking Detector signal from event and mul tree
 //
 // author : Tao Ye <tao.ye@stonybrook.edu>
@@ -6,7 +6,7 @@
 
 #include "device_list.h"
 
-void CheckDetector(){
+void CheckNormalizedDetector(){
   gStyle->SetStatW(0.3);
   gStyle->SetStatH(0.4);
 

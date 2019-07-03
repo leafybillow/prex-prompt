@@ -1,4 +1,4 @@
-// CheckSAM.C : 
+// CheckNormalizedSAM.C : 
 //	ROOT script for checking SAM signal from event and mul tree
 //
 // author : Tao Ye <tao.ye@stonybrook.edu>
@@ -6,7 +6,7 @@
 
 #include "device_list.h"
 
-void CheckSAM(){
+void CheckNormalizedSAM(){
   gStyle->SetStatW(0.3);
   gStyle->SetStatH(0.4);
 

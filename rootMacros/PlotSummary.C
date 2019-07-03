@@ -18,19 +18,29 @@
 #include "CheckBCMdd.C"
 #include "CheckBPM.C"
 #include "PlotBPMDiffCorrelation.C"
+
+#include "CheckNormalizedSAM.C"
 #include "CheckSAM.C"
+
 #include "CheckDetector.C"
+#include "CheckNormalizedDetector.C"
+
 #include "CheckDetectorCorrelation.C"
+
+#include "CheckRegNormDetector.C"
 #include "CheckRegressedDetector.C"
+
 #include "CheckSAMCorrelation.C"
 #include "CheckRegression.C"
 #include "CheckPairSAM.C"
+
+#include "CheckNormalizedComboSAM.C"
 #include "CheckComboSAM.C"
 
 #include "PlotErrorCounters.C"
 #include "Integrated.C"
 
-void PlotSummary(TString filename){
+void PlotSummary(TString filename, Bool_t isNormalized=kTRUE){
 
   japanOutput = TFile::Open(filename);
   Ssiz_t pfirst = filename.Last('_')+1;
@@ -108,8 +118,12 @@ void PlotSummary(TString filename){
 
   gSystem->Exec(Form("rm %s*bpm*.png",output_path.Data()));
 
-  //===== SAM Plots =======
-  CheckDetector();
+  //===== Main Detector Plots =======
+  if(isNormalized)
+    CheckNormalizedDetector();
+  else
+    CheckDetector();
+
   CheckDetectorCorrelation();
   gSystem->Exec(Form("convert $(ls -rt %s*maindet*.png) %srun%s_summary_main_detector.pdf",
   		     output_path.Data(),
@@ -117,8 +131,12 @@ void PlotSummary(TString filename){
   		     run_seg.Data()));
 
   gSystem->Exec(Form("rm %s*maindet*.png",output_path.Data()));
+  
+  if(isNormalized)
+    CheckRegNormDetector();
+  else
+    CheckRegressedDetector();
 
-  CheckRegressedDetector();
   gSystem->Exec(Form("convert $(ls -rt %s*ratecheck*.png) %srun%s_summary_ratecheck.pdf",
   		     output_path.Data(),
 		     output_path.Data(),
@@ -127,7 +145,11 @@ void PlotSummary(TString filename){
   gSystem->Exec(Form("rm %s*ratecheck*.png",output_path.Data()));
 
   //===== SAM Plots =======
-  CheckSAM();
+  if(isNormalized)
+    CheckNormalizedSAM();
+  else
+    CheckSAM();
+
   CheckSAMCorrelation();
   gSystem->Exec(Form("convert $(ls -rt %s*sam*.png) %srun%s_summary_sam.pdf",
   		     output_path.Data(),
@@ -145,7 +167,11 @@ void PlotSummary(TString filename){
   }
   else{
     CheckRegression();
-    CheckComboSAM();
+
+    if(isNormalized)
+      CheckNormalizedSAM();
+    else
+      CheckComboSAM();
   }
 
   // ===== Integrated Convergence 
