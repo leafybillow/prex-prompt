@@ -32,6 +32,7 @@
 
 #include "CheckSAMCorrelation.C"
 #include "CheckRegression.C"
+#include "RegressionSummary.C"
 #include "CheckPairSAM.C"
 
 #include "CheckNormalizedComboSAM.C"
@@ -40,7 +41,9 @@
 #include "PlotErrorCounters.C"
 #include "Integrated.C"
 
-void PlotSummary(TString filename, Bool_t isNormalized=kTRUE){
+void PlotSummary(TString filename){
+
+  Bool_t isNormalized=kTRUE;
 
   japanOutput = TFile::Open(filename);
   Ssiz_t pfirst = filename.Last('_')+1;
@@ -132,17 +135,6 @@ void PlotSummary(TString filename, Bool_t isNormalized=kTRUE){
 
   gSystem->Exec(Form("rm %s*maindet*.png",output_path.Data()));
   
-  if(isNormalized)
-    CheckRegNormDetector();
-  else
-    CheckRegressedDetector();
-
-  gSystem->Exec(Form("convert $(ls -rt %s*ratecheck*.png) %srun%s_summary_ratecheck.pdf",
-  		     output_path.Data(),
-		     output_path.Data(),
-  		     run_seg.Data()));
-
-  gSystem->Exec(Form("rm %s*ratecheck*.png",output_path.Data()));
 
   //===== SAM Plots =======
   if(isNormalized)
@@ -166,12 +158,25 @@ void PlotSummary(TString filename, Bool_t isNormalized=kTRUE){
 	      << filename << "!" << std::endl;
   }
   else{
+    RegressionSummary();
     CheckRegression();
-
     if(isNormalized)
-      CheckNormalizedSAM();
+      CheckNormalizedComboSAM();
     else
       CheckComboSAM();
+    
+    if(isNormalized)
+      CheckRegNormDetector();
+    else
+      CheckRegressedDetector();
+
+    gSystem->Exec(Form("convert $(ls -rt %s*ratecheck*.png) %srun%s_summary_ratecheck.pdf",
+		       output_path.Data(),
+		       output_path.Data(),
+		       run_seg.Data()));
+
+    gSystem->Exec(Form("rm %s*ratecheck*.png",output_path.Data()));
+
   }
 
   // ===== Integrated Convergence 
