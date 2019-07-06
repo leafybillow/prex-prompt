@@ -1,6 +1,10 @@
 #! /bin/sh
 runnum=$1;
-
+if [ -z "$runnum"]
+then
+    echo "Run Number is empty";
+    exit 1;
+fi
 #  Remove the LRB output files if they exist
 shopt -s extglob
 # find split file
