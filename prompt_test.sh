@@ -1,7 +1,7 @@
 #! /bin/sh
 runnum=$1;
 if [ -z "$runnum"]
-then 
+then
     echo "Run Number is empty";
     exit 1;
 fi
