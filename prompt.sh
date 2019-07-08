@@ -1,10 +1,12 @@
 #! /bin/sh
 runnum=$1;
+eventrange=$2;
 if [ -z "$runnum" ]
 then
     echo "Run Number is empty";
     exit 1;
 fi
+
 #  Remove the LRB output files if they exist
 shopt -s extglob
 # find split file
@@ -21,7 +23,7 @@ done
 timenow=$(date +"%Y-%m%d-%H%M");
 
 ./qwparity -r $runnum -c prex_prompt.conf \
-    -e 0:100000 \
+    -e $eventrange \
     --rootfile-stem prexTest_ 
 
 # cp ./japanOutput/summary_$runnum.txt \
@@ -31,10 +33,11 @@ timenow=$(date +"%Y-%m%d-%H%M");
 timenow=$(date +"%Y-%m%d-%H%M");
 
 ./qwparity -r $runnum -c prex_prompt.conf \
-    -e 0:100000 \
+    -e $eventrange \
     --rootfile-stem prexTest_ \
     --QwLog.logfile ./LogFiles/QwLog_run$runnum\_promptTest_$timenow.txt ;
 
+./auto_postpan.sh $runnum
 # BeamMod Data Extraction (FIXME)
 # BeamMod Instant Slope Calculation (FIXME)
 # BeamMod Instant correction and summary (FIXME)

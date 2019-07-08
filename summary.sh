@@ -22,12 +22,12 @@ do
 
     root -b -q -l './rootMacros/PlotSummary.C("'$rootfile'")';
 
-    # if [ ! -d ./hallaweb_online/summary/run$run_seg ]; then
-    # 	mkdir ./hallaweb_online/summary/run$run_seg;
-    # fi
+    if [ ! -d ./hallaweb_online/width/run$run_seg ]; then
+    	mkdir ./hallaweb_online/width/run$run_seg;
+    fi
 
-    # cp  ./SummaryPlots/run$run_seg/* \
-    # 	./hallaweb_online/summary/run$run_seg/;
+    cp  ./SummaryPlots/run$run_seg/* \
+    	./hallaweb_online/width/run$run_seg/;
 
 
     # cp ./japanOutput/summary_*$runnum*.txt \
