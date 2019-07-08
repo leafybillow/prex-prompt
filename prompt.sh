@@ -1,6 +1,6 @@
 #! /bin/sh
 runnum=$1;
-if [ -z "$runnum"]
+if [ -z "$runnum" ]
 then
     echo "Run Number is empty";
     exit 1;
@@ -21,8 +21,7 @@ done
 timenow=$(date +"%Y-%m%d-%H%M");
 
 ./qwparity -r $runnum -c prex_prompt.conf \
-    --rootfile-stem prexPrompt_pass1_ \
-    --QwLog.logfile ./LogFiles/QwLog_run$runnum\_prompt_pass1_$timenow.txt ;
+    --rootfile-stem prexTest_ \
 
 # cp ./japanOutput/summary_$runnum.txt \
 #     ./SummaryText/summary_prompt_pass1_$runnum.txt;
@@ -31,9 +30,8 @@ timenow=$(date +"%Y-%m%d-%H%M");
 timenow=$(date +"%Y-%m%d-%H%M");
 
 ./qwparity -r $runnum -c prex_prompt.conf \
-    --rootfile-stem prexPrompt_pass2_ \
-    --QwLog.logfile ./LogFiles/QwLog_run$runnum\_prompt_pass2_$timenow.txt ;
-
+    --rootfile-stem prexTest_ \
+    --QwLog.logfile ./LogFiles/QwLog_run$runnum\_promptTest_$timenow.txt ;
 
 # BeamMod Data Extraction (FIXME)
 # BeamMod Instant Slope Calculation (FIXME)
