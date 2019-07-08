@@ -21,7 +21,8 @@ done
 timenow=$(date +"%Y-%m%d-%H%M");
 
 ./qwparity -r $runnum -c prex_prompt.conf \
-    --rootfile-stem prexTest_ \
+    -e 0:100000 \
+    --rootfile-stem prexTest_ 
 
 # cp ./japanOutput/summary_$runnum.txt \
 #     ./SummaryText/summary_prompt_pass1_$runnum.txt;
@@ -30,6 +31,7 @@ timenow=$(date +"%Y-%m%d-%H%M");
 timenow=$(date +"%Y-%m%d-%H%M");
 
 ./qwparity -r $runnum -c prex_prompt.conf \
+    -e 0:100000 \
     --rootfile-stem prexTest_ \
     --QwLog.logfile ./LogFiles/QwLog_run$runnum\_promptTest_$timenow.txt ;
 
