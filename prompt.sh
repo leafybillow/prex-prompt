@@ -1,10 +1,17 @@
 #! /bin/sh
 runnum=$1;
-eventrange=$2;
+
 if [ -z "$runnum" ]
 then
     echo "Run Number is empty";
     exit 1;
+fi
+
+if [ -z "$2" ]
+then
+    eventrange=""
+else
+    eventrange="-e $2"
 fi
 
 #  Remove the LRB output files if they exist
@@ -23,21 +30,23 @@ done
 timenow=$(date +"%Y-%m%d-%H%M");
 
 ./qwparity -r $runnum -c prex_prompt.conf \
-    -e $eventrange \
+    $eventrange \
     --rootfile-stem prexTest_ 
 
 # cp ./japanOutput/summary_$runnum.txt \
 #     ./SummaryText/summary_prompt_pass1_$runnum.txt;
 
+# Postpan regression to the first pass results
+./auto_postpan.sh $runnum;
+
 #JAPAN Second Pass
 timenow=$(date +"%Y-%m%d-%H%M");
 
 ./qwparity -r $runnum -c prex_prompt.conf \
-    -e $eventrange \
+    $eventrange \
     --rootfile-stem prexTest_ \
     --QwLog.logfile ./LogFiles/QwLog_run$runnum\_promptTest_$timenow.txt ;
 
-./auto_postpan.sh $runnum
 # BeamMod Data Extraction (FIXME)
 # BeamMod Instant Slope Calculation (FIXME)
 # BeamMod Instant correction and summary (FIXME)

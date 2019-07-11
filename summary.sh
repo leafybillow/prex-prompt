@@ -29,7 +29,6 @@ do
     cp  ./SummaryPlots/run$run_seg/* \
     	./hallaweb_online/width/run$run_seg/;
 
-
     # cp ./japanOutput/summary_*$runnum*.txt \
     # 	./SummaryText/
 
