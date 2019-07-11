@@ -47,10 +47,6 @@ timenow=$(date +"%Y-%m%d-%H%M");
     --rootfile-stem prexTest_ \
     --QwLog.logfile ./LogFiles/QwLog_run$runnum\_promptTest_$timenow.txt ;
 
-# BeamMod Data Extraction (FIXME)
-# BeamMod Instant Slope Calculation (FIXME)
-# BeamMod Instant correction and summary (FIXME)
-
 # Make Summary Plots/Text and sync to HallA onlineWeb
 ./summary.sh $runnum;
     
